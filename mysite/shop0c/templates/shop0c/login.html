@@ -8,7 +8,7 @@
 <body>
     <h1>ログインしてください</h1>
     <br>
-    <form action="{% url 'shop0c:main' %}" method="POST">
+    <form action="{% url 'shop0c:login' %}" method="POST">
         {% csrf_token %}
         <table>
             {% for login in form %}

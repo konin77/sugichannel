@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Top</title>
+</head>
+<body>
+    <h1>商品の検索を行います</h1>
+    <br>
+    <form>
+        <label for="items">カテゴリ：</label>
+            <select name="item" id="items">
+                <option value="all" selected>すべて</option>
+                <option value="hat">帽子</option>
+                <option value="bag">鞄</option>
+            </select>
+        <label for="keyword">キーワード：</label>
+        <input type="text" name="keyeord"> 
+            <input type="submit" value="検索">
+    </form>
+    <br>
+    <a href="look cart">ショッピングカートを見る</a>
+    <br>
+    <a href="look log">購入履歴（任意機能）</a><br>
+    {% if login_flag == True %}
+    <a href="">会員情報の確認</a><br>
+    <a href="">会員情報の変更</a><br>
+    <a href="{% url 'shop0c:logout' %}">ログアウト</a><br>
+    {% else %}
+    <a href="">ログイン</a><br>
+    {% endif %}
+    <a href="to admin">管理者ページ（任意機能）</a><br>
+</body>
+</html>

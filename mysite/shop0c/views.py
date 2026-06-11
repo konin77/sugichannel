@@ -7,9 +7,17 @@ from shop0c.forms import LoginForm
 # Create your views here.
 class Top(View):
     def get(self,request):
-        return render(request,'shop0c/main.html')
+        login_flag = request.session['is_login']
+        context = {
+            'login_flag':login_flag
+        }
+        return render(request,'shop0c/main.html',context)
     def post(self,request):
-        pass
+        login_flag = request.session['is_login']
+        context = {
+            'login_flag':login_flag
+        }
+        return render(request,'shop0c/main.html',context)
 def result(request):
     pass
 def detail(request):
@@ -41,9 +49,17 @@ class Login(View):
 
                 request.session['user_id'] = user.user_id
                 request.session['password'] = user.password
+                request.session['is_login'] = True
                 
                 return redirect(reverse('shop0c:main'))
 
+            else:
+                return redirect(reverse('shop0c:login'))
+
+class Logout(View):
+    def get(self, request):
+        request.session['is_login'] = False
+        return redirect(reverse('shop0c:main'))
 
 def register(request):
     pass
