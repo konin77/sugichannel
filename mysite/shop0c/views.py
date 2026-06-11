@@ -5,8 +5,11 @@ from shop0c.models import User
 from shop0c.forms import LoginForm
 
 # Create your views here.
-def index(request):
-    pass
+class Top(View):
+    def get(self,request):
+        return render(request,'shop0c/main.html')
+    def post(self,request):
+        pass
 def result(request):
     pass
 def detail(request):
@@ -35,9 +38,12 @@ class Login(View):
         for user in queryset:
             
             if user.user_id == request.POST['id'] and user.password == request.POST['password']:
-                 
+
                 request.session['user_id'] = user.user_id
                 request.session['password'] = user.password
+                
+                return redirect(reverse('shop0c:main'))
+
 
 def register(request):
     pass
