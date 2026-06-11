@@ -59,7 +59,7 @@ class Item(models.Model):
             max_length=32
     )
     color = models.CharField(
-            verbose_name='メーカー色',
+            verbose_name='商品色',
             max_length=16
     )
     price = models.IntegerField(
