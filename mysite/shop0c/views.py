@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.views.generic import View
 from shop0c.models import User
-from shop0c.forms import LoginForm
+from shop0c.forms import LoginForm, RegistUserForm
 
 # Create your views here.
 class Top(View):
@@ -61,10 +61,24 @@ class Logout(View):
         request.session['is_login'] = False
         return redirect(reverse('shop0c:main'))
 
-def register(request):
-    pass
-def confirm(request):
-    pass
+class Register(View):
+    def get(self, request):
+        form = RegistUserForm()
+        context = {
+            "form":form,
+        }
+        return render(request, 'shop0c/registerUser.html', context)
+        
+
+    def post(self, request):
+        form = RegistUserForm(request.POST)
+        if not form.is_valid():
+            context = {
+                "form":form,
+            }
+            return render(request, 'shop0c/registerUser.html', context)
+        
+
 def commit(request):
     pass
 def info(request):
