@@ -73,7 +73,7 @@ class Item(models.Model):
             default=False,
             max_length=1
     )
-    category_id = models.ForeignKey(
+    category = models.ForeignKey(
             Category,
             verbose_name='カテゴリID',
             on_delete=models.CASCADE
@@ -90,12 +90,12 @@ class Shopcart(models.Model):
             verbose_name='登録日',
             auto_now_add=True
     )
-    item_id = models.ForeignKey(
+    item = models.ForeignKey(
             Item,
             verbose_name='商品ID',
             on_delete=models.CASCADE
     )
-    user_id = models.ForeignKey(
+    user = models.ForeignKey(
             User,
             verbose_name='会員ID',
             on_delete=models.CASCADE
@@ -123,7 +123,7 @@ class Purchase(models.Model):
             default=False,
             max_length=1
     )
-    user_id = models.ForeignKey(
+    user = models.ForeignKey(
             User,
             verbose_name='会員ID',
             on_delete=models.CASCADE
@@ -142,12 +142,12 @@ class Detail(models.Model):
             verbose_name='注文数',
             validators=[MinLengthValidator(1)]
     )
-    item_id = models.ForeignKey(
+    item = models.ForeignKey(
                 Item,
                 verbose_name='商品ID',
                 on_delete=models.CASCADE
     )
-    Purchase_id = models.ForeignKey(
+    Purchase = models.ForeignKey(
             Purchase,
             verbose_name='注文ID',
             on_delete=models.CASCADE

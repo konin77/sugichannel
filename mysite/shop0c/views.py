@@ -13,3 +13,15 @@ def login(request):
     pass
 def register(request):
     pass
+def confirm(request):
+    pass
+def commit(request):
+    pass
+def info(request):
+    pass
+def update_user(request):
+    pass
+def update_confirm(request):
+    pass
+def update_commit(request):
+    pass
