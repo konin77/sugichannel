@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>会員情報の更新</title>
+</head>
+<body>
+    <h1>以下の会員情報で更新しますか？</h1>
+    <br>
+    <form action="{% url 'shop0c:updateConfirm' %}" method="POST">
+        {% csrf_token %}
+        <table>
+            {% for update in form %}
+            <tr>
+                <th>{{update.label}}</th>
+                <td>
+                    {% if update.errors %}
+                        <p class="error">{{ update.errors.0 }}</p>
+                    {% endif %}
+                    {{update}}
+                </td>
+            </tr>
+        {% endfor %}
+                <tr>
+                    <td>
+                        <div style="text-align:center">
+                            <input type="submit" value="変更">
+                        </div>
+                    </td>
+                </tr>
+                
+            
+        </table>
+    </form>
+   
+    <br>
+    <a href="{% url 'shop0c:delete' %}">退会する</a>
+    <br>
+    <a href="">購入履歴（任意機能へ）</a>
+    <br>
+    <a href="{% url 'shop0c:main' %}">商品検索へ</a>
+</body>
+</html>

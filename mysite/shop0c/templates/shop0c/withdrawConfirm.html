@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>退会画面</title>
+</head>
+<body>
+    <h1>{{name}}さん、本当に退会しますか？</h1>
+    <form action="{% url 'shop0c:delete' %}" method="POST">
+        <input type="submit" value="退会">
+    </form>
+    <a href="{% url 'shop0c:main' %}">商品検索へ</a>
+</body>
+</html>

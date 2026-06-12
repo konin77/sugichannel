@@ -25,8 +25,8 @@
     <a href="look log">購入履歴（任意機能）</a><br>
     {% if login_flag == True %}
     <p>ようこそ{{name}}さん</p>
-    <a href="">会員情報の確認</a><br>
-    <a href="">会員情報の変更</a><br>
+    <a href="{% url 'shop0c:userInfo' %}">会員情報の確認</a><br>
+    <a href="{% url 'shop0c:updateUser' %}">会員情報の変更</a><br>
     <a href="{% url 'shop0c:logout' %}">ログアウト</a><br>
     {% else %}
     <a href="{% url 'shop0c:login' %}">ログイン</a><br>

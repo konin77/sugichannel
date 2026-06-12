@@ -20,12 +20,7 @@ class Top(View):
             'login_flag':login_flag
         }
         return render(request,'shop0c/main.html',context)
-def result(request):
-    pass
-def detail(request):
-    pass
-def cart(request):
-    pass
+
 
 class Login(View):
     def get(self, request):
@@ -52,6 +47,7 @@ class Login(View):
                 request.session['user_id'] = user.user_id
                 request.session['password'] = user.password
                 request.session['name'] = user.name
+                request.session['address'] = user.address
                 request.session['is_login'] = True
                 
                 return redirect(reverse('shop0c:main'))
@@ -112,13 +108,81 @@ class Confirmregister(View):
             'name':name
         }
         return render(request, 'shop0c/registerUserCommit.html',context)
+    
+class UserInfo(View):
+    def get(self,request):
+        user_id = request.session['user_id']
+        password = request.session['password']
+        name = request.session['name']
+        address = request.session['address']
 
-def commit(request):
-    pass
-def info(request):
-    pass
-def update_user(request):
-    pass
+        context = {
+            'user_id':user_id,
+            'password':password,
+            'name':name,
+            'address':address
+        }
+
+        return render(request,'shop0c/userInfo.html',context)
+
+    def post(self,request):
+        pass
+
+class UpdateUser(View):
+    def get(self, request):
+        user_id = request.session['user_id']
+        password = request.session['password']
+        name = request.session['name']
+        address = request.session['address']
+
+        form = RegistUserForm()
+        form.fields['id'].initial = user_id
+        form.fields['name'].initial = name
+        form.fields['address'].initial = address
+
+        context = {
+            'form':form
+        }
+
+        return render(request,'shop0c/updateUser.html',context)
+    def post(self, request):
+        pass
+
+class UpdateUserConfirm(View):
+    def get(self, request):
+        pass
+    def post(self, request):
+
+        new_user = User()
+        
+        new_user.user_id = request.POST['id']
+        new_user.password = request.POST['password']
+        new_user.name = request.POST['name']
+        new_user.address = request.POST['address']
+
+        new_user.save()
+
+class Delete(View):
+    def get(self, request):
+        name = request.session['name']
+        context = {
+            'name':name
+        }
+        return render(request,'shop0c/withdrawConfirm.html', context)
+
+    def post(self, request):
+        print(request.session['user_id'])
+        user = User.objects.get(user_id=request.session['user_id'])
+        name = user.name
+        context = {
+            'name':name
+        }
+        user.delete()
+        request.session['is_login'] = False
+        return render(request,'shop0c/withdrawCommit.html',context)
+
+
+
 def update_confirm(request):
     pass
 def update_commit(request):
