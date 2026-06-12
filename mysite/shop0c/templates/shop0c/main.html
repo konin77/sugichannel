@@ -8,15 +8,20 @@
 <body>
     <h1>商品の検索を行います</h1>
     <br>
-    <form>
+    <form action="{% url 'shop0c:search' %}" method="POST">
         <label for="items">カテゴリ：</label>
-            <select name="item" id="items">
+            <select name="category" id="items">
                 <option value="all" selected>すべて</option>
-                <option value="hat">帽子</option>
-                <option value="bag">鞄</option>
+                <option value="1">家電</option>
+                <option value="2">パソコン・周辺機器</option>
+                <option value="3">文房具</option>
+                <option value="4">キッチン用品</option>
+                <option value="5">スポーツ用品</option>
+                <option value="7">帽子</option>
+                <option value="6">鞄</option>
             </select>
-        <label for="keyword">キーワード：</label>
-        <input type="text" name="keyeord"> 
+            <label for="keywords">キーワード：</label>
+            <input type="text" name="keyword">
             <input type="submit" value="検索">
     </form>
     <br>

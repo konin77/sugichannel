@@ -1,17 +1,20 @@
 from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.views.generic import View
-from shop0c.models import User
-from shop0c.forms import LoginForm, RegistUserForm
+from shop0c.models import User, Item
+from shop0c.forms import LoginForm, RegistUserForm #,Search
+#from django.contrib.auth import logout
 
 # Create your views here.
 class Top(View):
     def get(self,request):
+        #form = Search()
         login_flag = request.session['is_login']
         name = request.session['name']
         context = {
             'login_flag':login_flag,
-            'name':name
+            'name':name,
+            #'form':form
         }
         return render(request,'shop0c/main.html',context)
     def post(self,request):
@@ -20,6 +23,45 @@ class Top(View):
             'login_flag':login_flag
         }
         return render(request,'shop0c/main.html',context)
+
+class Search(View):
+    def get(self, request):
+        pass
+    def post(self, request):
+        category = request.POST['category']
+        keyword = request.POST['keyword']
+        category_map = {
+            'all':'すべて',
+            '1':'家電',
+            '2':'パソコン・周辺機器',
+            '3':'文房具',
+            '4':'キッチン用品',
+            '5':'スポーツ用品',
+            '6':'鞄',
+            '7':'帽子'
+        }
+
+        category_name = category_map[category]
+        if category != 'all':
+            if keyword:
+                queryset = Item.objects.filter(category=int(category), name__icontains=keyword)
+            else:
+                queryset = Item.objects.filter(category=int(category))
+        
+        else:
+            if keyword:
+                queryset = Item.objects.filter(name__icontains=keyword)
+            else:
+                queryset = Item.objects.all()
+        
+        context = {
+            'items':queryset,
+            'category':category,
+            'keyword':keyword,
+            'category_name':category_name
+        }
+
+        return render(request,'shop0c/searchResult.html',context)
 
 
 class Login(View):
@@ -58,7 +100,11 @@ class Login(View):
 class Logout(View):
     def get(self, request):
         request.session['is_login'] = False
-        return redirect(reverse('shop0c:main'))
+        request.session['user_id'] = ''
+        request.session['password'] = ''
+        request.session['name'] = ''
+        request.session['address'] = ''
+        return redirect(reverse('shop0c:login'))
 
 class Register(View):
     def get(self, request):
@@ -153,6 +199,10 @@ class UpdateUserConfirm(View):
         pass
     def post(self, request):
 
+        old_user = User.objects.get(user_id=request.session['user_id'])
+        old_user.delete()
+
+
         new_user = User()
         
         new_user.user_id = request.POST['id']
@@ -161,6 +211,22 @@ class UpdateUserConfirm(View):
         new_user.address = request.POST['address']
 
         new_user.save()
+
+        request.session['user_id'] = new_user.user_id
+        request.session['password'] = new_user.password
+        request.session['name'] = new_user.name
+        request.session['address'] = new_user.address
+        request.session['is_login'] = True
+
+        context = {
+            'user_id':request.session['user_id'],
+            'name':request.session['name'],
+            'address':request.session['address']
+        }
+
+        return render(request,'shop0c/updateUserCommit.html',context)
+
+
 
 class Delete(View):
     def get(self, request):

@@ -17,6 +17,10 @@ class RegistUserForm(forms.Form):
     name = forms.CharField(label='お名前：', max_length=128, widget=forms.TextInput(attrs={'class':'form-control'}))
     address = forms.CharField(label='ご住所：', max_length=256, widget=forms.TextInput(attrs={'class':'form-control'}))
 
+'''
+class Search(forms.Form):
+    keyword = forms.CharField(label='キーワード：', max_length=128, widget=forms.TextInput(attrs={'class':'form-control'}))
+'''
 
 
 
