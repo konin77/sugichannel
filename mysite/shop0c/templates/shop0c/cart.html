@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ショッピングカート</title>
+</head>
+<body>
+    <table>
+        <tr>
+            <th>商品名</th>
+            <th>商品の色</th>
+            <th>メーカー名</th>
+            <th>単価</th>
+            <th>数量</th>
+        </tr>
+        {% for item in items %}
+        <tr>
+            <td>item.name</td>
+            <td>item.color</td>
+            <td>item.manufacturer</td>
+            <td>item.price</td>
+            <td>cart.ammount</td>
+        </tr>
+        {% endfor %}
+    </table>
+</body>
+</html>

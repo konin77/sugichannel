@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.views.generic import View
-from shop0c.models import User, Item
+from shop0c.models import User, Item, Shopcart
 from shop0c.forms import LoginForm, RegistUserForm #,Search
 #from django.contrib.auth import logout
 
@@ -77,6 +77,28 @@ class Detail(View):
     def post(self, request):
         pass
 
+class Cart(View):
+    def get(self, request):
+        pass
+    def post(self, request):
+        amount = request.POST['amount']
+        item_id = request.POST['item_id']
+        user_id = request.session['user_id']
+        new_cart = Shopcart()
+        item = Item.objects.get(item_id=item_id)
+        user = User.objects.get(user_id=user_id)
+        new_cart.amount = amount
+        new_cart.item = item
+        new_cart.user = user
+        new_cart.save()
+
+        #carts = Shopcart.objects.get(user=user_id)
+        context = {
+            'carts':new_cart,
+        }
+
+        return render(request,'shop0c/cart.html',context)
+
 class Login(View):
     def get(self, request):
         form = LoginForm()
@@ -96,19 +118,18 @@ class Login(View):
         
         queryset = User.objects.all()
         for user in queryset:
-            
+
             if user.user_id == request.POST['id'] and user.password == request.POST['password']:
-
-                request.session['user_id'] = user.user_id
-                request.session['password'] = user.password
-                request.session['name'] = user.name
-                request.session['address'] = user.address
-                request.session['is_login'] = True
+                    request.session['user_id'] = user.user_id
+                    request.session['password'] = user.password
+                    request.session['name'] = user.name
+                    request.session['address'] = user.address
+                    request.session['is_login'] = True
                 
-                return redirect(reverse('shop0c:main'))
+                    return redirect(reverse('shop0c:main'))
 
-            else:
-                return redirect(reverse('shop0c:login'))
+            
+        return redirect(reverse('shop0c:login'))
 
 class Logout(View):
     def get(self, request):
@@ -259,10 +280,3 @@ class Delete(View):
         user.delete()
         request.session['is_login'] = False
         return render(request,'shop0c/withdrawCommit.html',context)
-
-
-
-def update_confirm(request):
-    pass
-def update_commit(request):
-    pass

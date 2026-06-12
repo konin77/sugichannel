@@ -30,10 +30,11 @@
         </tr>
     </table>
     {% if is_login == True %}
-    <form action="{% url 'shop0c:search' %}" method="POST">
+    <form action="{% url 'shop0c:cart' %}" method="POST">
     {% else %}
     <form action="{% url 'shop0c:login' %}" method="GET"></form>
     {% endif %}
+        <input type="hidden" name="item_id" value="{{item.item_id}}">
         <label for="amounts">数量：</label>
             <select name="amount" id="amounts">
                 <option value="1" selected>1</option>
