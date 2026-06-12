@@ -62,7 +62,20 @@ class Search(View):
         }
 
         return render(request,'shop0c/searchResult.html',context)
+    
+class Detail(View):
+    def get(self, request, pk):
+        item = Item.objects.get(item_id=pk)
+        is_login = request.session['is_login']
+        context = {
+            'item':item,
+            'is_login':is_login
+        }
 
+        return render(request,'shop0c/itemDetail.html',context)
+
+    def post(self, request):
+        pass
 
 class Login(View):
     def get(self, request):

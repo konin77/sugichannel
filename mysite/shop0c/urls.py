@@ -6,6 +6,7 @@ app_name = 'shop0c'
 urlpatterns = [
     path('', views.Top.as_view(), name='main'),
     path('search/', views.Search.as_view(), name='search'),
+    path('detail/<int:pk>/', views.Detail.as_view(), name='detail'),
     path('login/', views.Login.as_view(), name='login'),
     path('logout',views.Logout.as_view(), name='logout'),
     path('registeruser/', views.Register.as_view(), name='registerUser'),
