@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>会員登録の確認</title>
+</head>
+<body>
+    <h1>以下の情報で登録しますか？</h1>
+    <br>
+    <form action="{% url 'shop0c:confirmregister' %}" method="POST">
+        {% csrf_token %}
+        <table>
+                <tr>
+                    <th>会員ID：</th>
+                    <td>
+                        {{id}}<input type="hidden" name="id" value="{{id}}">
+                    </td>
+                    
+                </tr>
+                <tr>
+                    <th>パスワード：</th>
+                    <td>
+                        {{password}}<input type="hidden" name="password" value="{{password}}">
+                    </td>
+                    
+                </tr>
+                <tr>
+                    <th>お名前：</th>
+                    <td>
+                        {{name}}<input type="hidden" name="name" value="{{name}}">
+                    </td>
+                    
+                </tr>
+                <tr>
+                    <th>ご住所：</th>
+                    <td>
+                        {{address}}<input type="hidden" name="address" value="{{address}}">
+                    </td>
+                    
+                </tr>
+            <tr>
+                <td>
+                    <div style="text-align:center">
+                    <input type="submit" value="登録確認">
+                    </div>
+                </td>
+            </tr>
+            
+        </table>
+        
+    </form>
+    <br>
+    <a href="">商品検索へ</a>
+</body>
+</html>

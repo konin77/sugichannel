@@ -8,8 +8,10 @@ from shop0c.forms import LoginForm, RegistUserForm
 class Top(View):
     def get(self,request):
         login_flag = request.session['is_login']
+        name = request.session['name']
         context = {
-            'login_flag':login_flag
+            'login_flag':login_flag,
+            'name':name
         }
         return render(request,'shop0c/main.html',context)
     def post(self,request):
@@ -49,6 +51,7 @@ class Login(View):
 
                 request.session['user_id'] = user.user_id
                 request.session['password'] = user.password
+                request.session['name'] = user.name
                 request.session['is_login'] = True
                 
                 return redirect(reverse('shop0c:main'))
@@ -78,6 +81,37 @@ class Register(View):
             }
             return render(request, 'shop0c/registerUser.html', context)
         
+        else:
+            context = {
+                'id':request.POST['id'],
+                'password':request.POST['password'],
+                'name':request.POST['name'],
+                'address':request.POST['address']
+            }
+            return render(request, 'shop0c/registerUserConfirm.html',context)
+
+class Confirmregister(View):
+    def get(self, request):
+        form = RegistUserForm()
+        context = {
+            "form":form,
+        }
+        return render(request, 'shop0c/registerUser.html', context)
+    def post(self, request):
+        new_user = User()
+
+        new_user.user_id = request.POST['id']
+        new_user.password = request.POST['password']
+        new_user.name = request.POST['name']
+        new_user.address = request.POST['address']
+
+        new_user.save()
+
+        name = new_user.name
+        context = {
+            'name':name
+        }
+        return render(request, 'shop0c/registerUserCommit.html',context)
 
 def commit(request):
     pass
