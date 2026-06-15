@@ -79,7 +79,28 @@ class Detail(View):
 
 class Cart(View):
     def get(self, request):
-        pass
+
+        user_id = request.session['user_id']
+        items = Item.objects.all()
+        user = User.objects.get(user_id=user_id)
+        carts = Shopcart.objects.filter(user=user)
+
+        sum = 0
+        for cart in carts:
+            sum += cart.amount*cart.item.price
+
+
+
+        #carts = Shopcart.objects.get(user=user_id)
+        context = {
+            'carts':carts,
+            'item':items,
+            'sum':sum
+        }
+
+        return render(request,'shop0c/cart.html',context)
+
+
     def post(self, request):
         amount = request.POST['amount']
         item_id = request.POST['item_id']
@@ -92,9 +113,18 @@ class Cart(View):
         new_cart.user = user
         new_cart.save()
 
+        items = Item.objects.all()
+        carts = Shopcart.objects.filter(user=user)
+
+        sum = 0
+        for cart in carts:
+            sum += cart.amount*cart.item.price
+
         #carts = Shopcart.objects.get(user=user_id)
         context = {
-            'carts':new_cart,
+            'carts':carts,
+            'item':items,
+            'sum':sum
         }
 
         return render(request,'shop0c/cart.html',context)

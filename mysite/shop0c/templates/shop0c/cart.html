@@ -14,15 +14,20 @@
             <th>単価</th>
             <th>数量</th>
         </tr>
-        {% for item in items %}
+        {% for cart in carts %}
         <tr>
-            <td>item.name</td>
-            <td>item.color</td>
-            <td>item.manufacturer</td>
-            <td>item.price</td>
-            <td>cart.ammount</td>
+            <td>{{cart.item.name}}</td>
+            <td>{{cart.item.color}}</td>
+            <td>{{cart.item.manufacturer}}</td>
+            <td>{{cart.item.price}}</td>
+            <td>{{cart.amount}}</td>
         </tr>
         {% endfor %}
     </table>
+    合計{{sum}}円
+    <form>
+        <input type="submit" value="購入する（任意機能）">
+    </form>
+    <a href="{% url 'shop0c:main' %}">商品検索へ</a>
 </body>
 </html>

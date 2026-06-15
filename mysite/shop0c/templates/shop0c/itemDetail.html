@@ -32,7 +32,7 @@
     {% if is_login == True %}
     <form action="{% url 'shop0c:cart' %}" method="POST">
     {% else %}
-    <form action="{% url 'shop0c:login' %}" method="GET"></form>
+    <form action="{% url 'shop0c:login' %}" method="GET">
     {% endif %}
         <input type="hidden" name="item_id" value="{{item.item_id}}">
         <label for="amounts">数量：</label>
