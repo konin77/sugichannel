@@ -129,6 +129,17 @@ class Cart(View):
 
         return render(request,'shop0c/cart.html',context)
 
+class Deletecart(View):
+    def get(self, request):
+        pass
+    def post(self, request):
+        id = request.POST['delete']
+        cart = Shopcart.objects.get(id=id)
+        cart.delete()
+
+        return redirect(reverse('shop0c:cart'))
+
+
 class Login(View):
     def get(self, request):
         form = LoginForm()

@@ -15,5 +15,6 @@ urlpatterns = [
     path('updateuser/', views.UpdateUser.as_view(),name='updateUser'),
     path('updateconfirm/',views.UpdateUserConfirm.as_view(),name='updateConfirm'),
     path('delete/',views.Delete.as_view(),name='delete'),
-    path('cart/',views.Cart.as_view(),name='cart')
+    path('cart/',views.Cart.as_view(),name='cart'),
+    path('deletecart/',views.Deletecart.as_view(),name='deletecart')
 ]

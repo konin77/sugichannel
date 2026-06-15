@@ -13,6 +13,8 @@
             <th>メーカー名</th>
             <th>単価</th>
             <th>数量</th>
+            <th>修正</th>
+            <th>削除</th>
         </tr>
         {% for cart in carts %}
         <tr>
@@ -21,6 +23,14 @@
             <td>{{cart.item.manufacturer}}</td>
             <td>{{cart.item.price}}</td>
             <td>{{cart.amount}}</td>
+            <form>
+                <td><input type="submit" value="修正"></td>
+                <input type="hidden" name="modify" value="{{cart.id}}">
+            </form>
+            <form action="{% url 'shop0c:deletecart' %}" method="POST">
+                <td><input type="submit" value="削除"></td>
+                <input type="hidden" name="delete" value="{{cart.id}}">
+            </form>
         </tr>
         {% endfor %}
     </table>
