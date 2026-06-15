@@ -161,8 +161,6 @@ class Modifycart(View):
         '''
 
     def post(self, request):
-        pass
-        '''
         id = request.POST['modify']
         cart = Shopcart.objects.filter(id=id)
         context = {
@@ -171,7 +169,7 @@ class Modifycart(View):
         }
 
         return render(request,'shop0c/modifycart.html',context)
-        '''
+        
 
 class Login(View):
     def get(self, request):
