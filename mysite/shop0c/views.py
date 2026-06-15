@@ -105,13 +105,22 @@ class Cart(View):
         amount = request.POST['amount']
         item_id = request.POST['item_id']
         user_id = request.session['user_id']
-        new_cart = Shopcart()
         item = Item.objects.get(item_id=item_id)
         user = User.objects.get(user_id=user_id)
-        new_cart.amount = amount
-        new_cart.item = item
-        new_cart.user = user
-        new_cart.save()
+
+        if Shopcart.objects.filter(item=item, user=user):
+            print('a')
+            cart = Shopcart.objects.get(item=item, user=user)
+            cart.amount += int(amount)
+            cart.save()
+
+        else:
+            print('b')
+            new_cart = Shopcart()
+            new_cart.amount = amount
+            new_cart.item = item
+            new_cart.user = user
+            new_cart.save()
 
         items = Item.objects.all()
         carts = Shopcart.objects.filter(user=user)
@@ -138,7 +147,31 @@ class Deletecart(View):
         cart.delete()
 
         return redirect(reverse('shop0c:cart'))
+    
+class Modifycart(View):
+    def get(self, request):
+        pass
+        '''
+        id = request.GET['id']
+        amount = request.GET['amount']
+        cart = Shopcart.objects.get(id=id)
+        cart.amount = amount
 
+        return redirect(reverse('shop0c:cart'))
+        '''
+
+    def post(self, request):
+        pass
+        '''
+        id = request.POST['modify']
+        cart = Shopcart.objects.filter(id=id)
+        context = {
+            'cart':cart,
+            'id':id
+        }
+
+        return render(request,'shop0c/modifycart.html',context)
+        '''
 
 class Login(View):
     def get(self, request):

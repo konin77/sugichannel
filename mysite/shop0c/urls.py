@@ -16,5 +16,6 @@ urlpatterns = [
     path('updateconfirm/',views.UpdateUserConfirm.as_view(),name='updateConfirm'),
     path('delete/',views.Delete.as_view(),name='delete'),
     path('cart/',views.Cart.as_view(),name='cart'),
-    path('deletecart/',views.Deletecart.as_view(),name='deletecart')
+    path('deletecart/',views.Deletecart.as_view(),name='deletecart'),
+    path('modifycart',views.Modifycart.as_view(),name='modifycart')
 ]

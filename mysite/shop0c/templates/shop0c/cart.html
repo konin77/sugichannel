@@ -23,7 +23,7 @@
             <td>{{cart.item.manufacturer}}</td>
             <td>{{cart.item.price}}</td>
             <td>{{cart.amount}}</td>
-            <form>
+            <form action="{% url 'shop0c:modifycart' %}" method="POST">
                 <td><input type="submit" value="修正"></td>
                 <input type="hidden" name="modify" value="{{cart.id}}">
             </form>
