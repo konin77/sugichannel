@@ -1,8 +1,8 @@
 from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.views.generic import View
-from shop0c.models import User, Item, Shopcart, Purchase, Detail, Admin, Category,
-from shop0c.forms import LoginForm, RegistUserForm ,UpdateUserForm
+from shop0c.models import User, Item, Shopcart, Purchase, Detail, Admin, Category
+from shop0c.forms import LoginForm, RegistUserForm ,UpdateUserForm, AdminLoginForm, ItemRegisterForm, ItemUpdateForm
 #from django.contrib.auth import logout
 
 from .forms import LoginForm #, ItemRegisterForm, ItemUpdateForm #, AdminPurchaseHistorySearchForm
@@ -467,10 +467,12 @@ class Updatedestination(View):
 
         return render(request,'shop0c/updatedestination.html',context)
 
-a = 'テスト'
 
+###########################
+# --- ここから管理機能 --- #
+###########################
 
-class adminLogin(View):
+class AdminLogin(View):
     def get(self, request, *args, **kwargs):
         form = LoginForm()
 
@@ -657,7 +659,7 @@ class ItemUpdate(View):
 
         new_item_id = form.cleaned_data["item_id"]
 
-        # 商品IDに変更があったとき
+        # 商品IDに変更があったときの処理
         if new_item_id != old_item.item_id:
             if Item.objects.filter(item_id=new_item_id).exists():
                 context = {
@@ -681,8 +683,8 @@ class ItemUpdate(View):
             new_item.save()
 
             # データベースのレコードをアップデート
-            ShoppingCart.objects.filter(item=old_item).update(item=new_item)
-            PurchaseModel.objects.filter(item=old_item).update(item=new_item)
+            Shopcart.objects.filter(item=old_item).update(item=new_item)
+            Purchase.objects.filter(item=old_item).update(item=new_item)
 
             old_item.delete()
         
@@ -735,7 +737,7 @@ class ItemDelete(View):
 
         #     return render(request, "adminItemDelete.html", context)
 
-        ShoppingCart.objects.filter(item=item).delete()
+        Shopcart.objects.filter(item=item).delete()
         item.delete()
 
         return redirect("item_list")

@@ -24,6 +24,7 @@ urlpatterns = [
     path('purchase/',views.Purchase_cart.as_view(),name='purchase'),
     path('updatedestination',views.Updatedestination.as_view(),name='updatedestination'),
 
+    # --- 管理機能　--- #
     path("admin/", views.AdminLogin.as_view(), name="admin_login"),
     path("adminMain/", views.AdminMain.as_view(), name="admin_main"),
     path("adminLogout/", views.AdminLogout.as_view(), name="admin_logout"),
