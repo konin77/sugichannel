@@ -216,7 +216,7 @@ class Login(View):
                     request.session['is_login'] = True
                 
                     return redirect(reverse('shop0c:main'))
-            
+
         s = '会員IDかパスワードが間違っています'
         form = LoginForm()
         context = {
@@ -466,6 +466,7 @@ class Updatedestination(View):
         }
 
         return render(request,'shop0c/updatedestination.html',context)
+
 
 
 ###########################
@@ -741,3 +742,4 @@ class ItemDelete(View):
         item.delete()
 
         return redirect("item_list")
+
