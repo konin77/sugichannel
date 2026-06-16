@@ -32,7 +32,7 @@
         </tr>
     </table>
     
-    <form action="{% url 'shop0c:modifycart' %}" method="GET">
+    <form action="{% url 'shop0c:updatecart' %}" method="POST">
     
         <input type="hidden" name="id" value="{{id}}">
         <label for="amounts">数量：</label>

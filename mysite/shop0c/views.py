@@ -166,7 +166,7 @@ class Modifycart(View):
 
     def post(self, request):
         id = request.POST['modify']
-        cart = Shopcart.objects.filter(id=id)
+        cart = Shopcart.objects.get(id=id)
         context = {
             'cart':cart,
             'id':id
@@ -174,6 +174,17 @@ class Modifycart(View):
 
         return render(request,'shop0c/modifycart.html',context)
         
+class Updatecart(View): 
+    def get(self, request):
+        pass
+    def post(self, request):
+        id = request.POST['id']
+        amount = request.POST['amount']
+        cart = Shopcart.objects.get(id=id)
+        cart.amount = amount
+        cart.save()
+        return redirect(reverse('shop0c:cart'))
+
 
 class Login(View):
     def get(self, request):
@@ -202,7 +213,7 @@ class Login(View):
                     request.session['address'] = user.address
                     request.session['is_login'] = True
                 
-                    return redirect(reverse('shop0c:main'))
+                    return redirect(reverse('shop0c:'))
 
         s = '会員IDかパスワードが間違っています'
         form = LoginForm()
@@ -395,3 +406,11 @@ class Delete(View):
         user.delete()
         request.session['is_login'] = False
         return render(request,'shop0c/withdrawCommit.html',context)
+
+'''
+class Purchase(View):
+    def get(self, request):
+        pass
+    def post(self, request):
+        pass
+'''
