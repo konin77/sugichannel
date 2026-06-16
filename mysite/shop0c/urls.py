@@ -23,4 +23,13 @@ urlpatterns = [
     path('updatecart',views.Updatecart.as_view(),name='updatecart'),
     path('purchase/',views.Purchase_cart.as_view(),name='purchase'),
     path('updatedestination',views.Updatedestination.as_view(),name='updatedestination'),
+
+    path("admin/", views.AdminLogin.as_view(), name="admin_login"),
+    path("adminMain/", views.AdminMain.as_view(), name="admin_main"),
+    path("adminLogout/", views.AdminLogout.as_view(), name="admin_logout"),
+
+    path("adminItemList/", views.ItemList.as_view(), name="item_list"),
+    path("adminItemRegister/", views.ItemRegister.as_view(), name="item_register"),
+    path("adminItemUpdate/<int:item_id>/", views.ItemUpdate.as_view(), name="item_update"),
+    path("adminItemDelete/<int:item_id>/", views.ItemDelete.as_view(), name="item_delete"),
 ]
