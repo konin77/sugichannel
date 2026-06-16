@@ -8,22 +8,31 @@
     <link rel="stylesheet" type="text/css" href="{% static 'table.css' %}"/>
 </head>
 <body>
-    <h1>以下の会員情報で更新しますか？</h1>
+    <h1>会員情報</h1>
     <br>
-    <form action="{% url 'shop0c:updateConfirm' %}" method="POST">
+    <form action="{% url 'shop0c:updateconf' %}" method="POST">
         {% csrf_token %}
         <table>
+            <tr>
+                <th>
+                    会員ID：
+                </th>
+                <td>{{user_id}}</td>
+            </tr>
             {% for update in form %}
             <tr>
                 <th>{{update.label}}</th>
                 <td>
-                    {% if update.errors %}
-                        <p class="error">{{ update.errors.0 }}</p>
-                    {% endif %}
+                    
                     {{update}}
                 </td>
             </tr>
-        {% endfor %}
+            {% endfor %}
+                   {% if form.non_field_errors %}
+                   {% for error in form.non_field_errors %}
+                   <p>{{error}}</p>
+                   {% endfor %}
+                   {% endif %}
                 <tr>
                     <td>
                         <div style="text-align:center">

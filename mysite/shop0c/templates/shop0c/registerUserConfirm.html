@@ -22,8 +22,11 @@
                 </tr>
                 <tr>
                     <th>パスワード：</th>
-                    <td>name="password" value="{{password}}"
-                        {{password}}<input type="hidden" name="password" value="{{password}}">
+                    <td>
+                            {% for i in password%}
+                            *
+                            {% endfor %}
+                            <input type="hidden" name="password" value="{{password}}">
                     </td>
                     
                 </tr>

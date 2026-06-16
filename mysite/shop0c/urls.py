@@ -4,7 +4,8 @@ from . import views
 app_name = 'shop0c'
 
 urlpatterns = [
-    path('', views.Top.as_view(), name='main'),
+    path('',views.index),
+    path('main/', views.Top.as_view(), name='main'),
     path('search/', views.Search.as_view(), name='search'),
     path('detail/<int:pk>/', views.Detail.as_view(), name='detail'),
     path('login/', views.Login.as_view(), name='login'),
@@ -13,6 +14,7 @@ urlpatterns = [
     path('registerconfirm/', views.Confirmregister.as_view(), name='confirmregister'),
     path('info/ ', views.UserInfo.as_view(), name='userInfo'),
     path('updateuser/', views.UpdateUser.as_view(),name='updateUser'),
+    path('updateconf',views.UpdateConfirm.as_view(),name='updateconf'),
     path('updateconfirm/',views.UpdateUserConfirm.as_view(),name='updateConfirm'),
     path('delete/',views.Delete.as_view(),name='delete'),
     path('cart/',views.Cart.as_view(),name='cart'),

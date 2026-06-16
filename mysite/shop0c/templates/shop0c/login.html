@@ -12,6 +12,7 @@
     <br>
     <form action="{% url 'shop0c:login' %}" method="POST">
         {% csrf_token %}
+        {{s}}
         <table>
             {% for login in form %}
                 <tr>

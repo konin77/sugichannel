@@ -17,13 +17,15 @@
                 <tr>
                     <th>{{register.label}}</th>
                     <td>
-                        {% if register.errors %}
-                            <p class="error">{{ register.errors.0 }}</p>
-                        {% endif %}
                         {{register}}
                     </td>
                 </tr>
             {% endfor %}
+            {% if form.non_field_errors %}
+                   {% for error in form.non_field_errors %}
+                   <p>{{error}}</p>
+                   {% endfor %}
+                   {% endif %}
             <tr>
                 <td>
                     <div style="text-align:center">
