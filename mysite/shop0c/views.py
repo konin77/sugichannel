@@ -464,3 +464,19 @@ class Updatedestination(View):
         }
 
         return render(request,'shop0c/updatedestination.html',context)
+    
+class PurchaseHistory(View):
+    def get(self,request):
+
+        user_id = request.session.get('user_id')
+        #purchase = Purchase()
+        #detail = Detail()
+        user = User(user_id=user_id)
+        
+        purchases = Purchase.objects.get(user=user)
+        details = []
+        #for purchase in 
+        
+
+    def post(self,request):
+        pass
