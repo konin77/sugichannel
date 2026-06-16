@@ -464,3 +464,5 @@ class Updatedestination(View):
         }
 
         return render(request,'shop0c/updatedestination.html',context)
+
+a = 'テスト'
