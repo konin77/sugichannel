@@ -77,7 +77,7 @@ WSGI_APPLICATION = 'config.wsgi.application'
 DATABASES = {
     'default': {
         "ENGINE": os.environ.get("DB_ENGINE", "django.db.backends.mysql"),
-        "NAME": os.environ.get("DB_NAME", "sugichannel"),
+        "NAME": os.environ.get("DB_NAME", "shop_c"),
         "USER": os.environ.get("DB_USER", "root"),
         "PASSWORD": os.environ.get("DB_PASSWORD", "P@ssw0rd"),
         "HOST": os.environ.get("DB_HOST", "127.0.0.1"),

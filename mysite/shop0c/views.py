@@ -213,7 +213,7 @@ class Login(View):
                     request.session['address'] = user.address
                     request.session['is_login'] = True
                 
-                    return redirect(reverse('shop0c:'))
+                    return redirect(reverse('shop0c:main'))
 
         s = '会員IDかパスワードが間違っています'
         form = LoginForm()
@@ -464,5 +464,3 @@ class Updatedestination(View):
         }
 
         return render(request,'shop0c/updatedestination.html',context)
-
-a = 'テスト'
