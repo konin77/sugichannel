@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>会員情報の更新</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'table.css' %}"/>
+</head>
+<body>
+    <h1>会員情報</h1>
+    <br>
+    <form action="{% url 'shop0c:updateconf' %}" method="POST">
+        {% csrf_token %}
+        <table>
+            <tr>
+                <th>
+                    会員ID：
+                </th>
+                <td>{{user_id}}</td>
+            </tr>
+            {% for update in form %}
+            <tr>
+                <th>{{update.label}}</th>
+                <td>
+                    
+                    {{update}}
+                </td>
+            </tr>
+            {% endfor %}
+                   {% if form.non_field_errors %}
+                   {% for error in form.non_field_errors %}
+                   <p>{{error}}</p>
+                   {% endfor %}
+                   {% endif %}
+                <tr>
+                    <td>
+                        <div style="text-align:center">
+                            <input type="submit" value="変更">
+                        </div>
+                    </td>
+                </tr>
+                
+            
+        </table>
+    </form>
+   
+    <br>
+    <a href="{% url 'shop0c:delete' %}">退会する</a>
+    <br>
+    <a href="">購入履歴（任意機能へ）</a>
+    <br>
+    <a href="{% url 'shop0c:main' %}">商品検索へ</a>
+</body>
+</html>

@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>商品数修正</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'table.css' %}"/>
+</head>
+<body>
+    <h1>商品の購入数修正</h1>
+    <table>
+        <tr>
+            <th>商品名</th>
+            <td>{{cart.item.name}}</td>
+        </tr>
+        <tr>
+            <th>商品の色</th>
+            <td>{{cart.item.color}}</td>
+        </tr>
+        <tr>
+            <th>メーカー名</th>
+            <td>{{cart.item.manufacturer}}</td>
+        </tr>
+        <tr>
+            <th>価格</th>
+            <td>{{cart.item.price}}</td>
+        </tr>
+        <tr>
+            <th>在庫数</th>
+            <td>{{cart.item.stock}}</td>
+        </tr>
+    </table>
+    
+    <form action="{% url 'shop0c:updatecart' %}" method="POST">
+    
+        <input type="hidden" name="id" value="{{id}}">
+        <label for="amounts">数量：</label>
+            <select name="amount" id="amounts">
+                <option value="1" selected>1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+                <option value="6">6</option>
+                <option value="7">7</option>
+                <option value="8">8</option>
+                <option value="9">9</option>
+            </select>
+            <input type="submit" value="ショッピングカートに入れる">
+    </form>
+    
+</body>
+<a href="{% url 'shop0c:main' %}">商品検索へ</a>
+</html>

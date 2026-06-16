@@ -216,3 +216,9 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+<<<<<<< HEAD
+
+# config
+
+=======
+>>>>>>> 316d5cbdb8395cea493fa4e6226f86961b7a8fa0

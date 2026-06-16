@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ショッピングカート</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'table.css' %}"/>
+</head>
+<body>
+    <table>
+        <tr>
+            <th>商品名</th>
+            <th>商品の色</th>
+            <th>メーカー名</th>
+            <th>単価</th>
+            <th>数量</th>
+            <th>修正</th>
+            <th>削除</th>
+        </tr>
+        {% for cart in carts %}
+        <tr>
+            <td>{{cart.item.name}}</td>
+            <td>{{cart.item.color}}</td>
+            <td>{{cart.item.manufacturer}}</td>
+            <td>{{cart.item.price}}</td>
+            <td>{{cart.amount}}</td>
+            <form action="{% url 'shop0c:modifycart' %}" method="POST">
+                <td><input type="submit" value="修正"></td>
+                <input type="hidden" name="modify" value="{{cart.id}}">
+            </form>
+            <form action="{% url 'shop0c:deletecart' %}" method="POST">
+                <td><input type="submit" value="削除"></td>
+                <input type="hidden" name="delete" value="{{cart.id}}">
+            </form>
+        </tr>
+        {% endfor %}
+    </table>
+    合計{{sum}}円
+    <form action="{% url 'shop0c:purchase' %}" method="POST">
+        <input type="submit" value="購入する（任意機能）">
+        <input type="hidden" name="sum" value="{{sum}}">
+    </form>
+    <a href="{% url 'shop0c:main' %}">商品検索へ</a>
+</body>
+</html>

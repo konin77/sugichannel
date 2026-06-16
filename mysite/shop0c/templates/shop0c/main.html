@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Top</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'table.css' %}"/>
+</head>
+<body>
+    <h1>商品の検索を行います</h1>
+    <br>
+    <form action="{% url 'shop0c:search' %}" method="POST">
+        <label for="items">カテゴリ：</label>
+            <select name="category" id="items">
+                <option value="all" selected>すべて</option>
+                <option value="1">家電</option>
+                <option value="2">パソコン・周辺機器</option>
+                <option value="3">文房具</option>
+                <option value="4">キッチン用品</option>
+                <option value="5">スポーツ用品</option>
+                <option value="7">帽子</option>
+                <option value="6">鞄</option>
+            </select>
+            <label for="keywords">キーワード：</label>
+            <input type="text" name="keyword">
+            <input type="submit" value="検索">
+    </form>
+    <br>
+    {% if login_flag == True  %}
+    <a href="{% url 'shop0c:cart' %}">ショッピングカートを見る</a>
+    {% else %}
+    <a href="{% url 'shop0c:login' %}">ショッピングカートを見る</a>
+    {% endif %}
+    <br>
+    <a href="look log">購入履歴（任意機能）</a><br>
+    {% if login_flag == True %}
+    <p>ようこそ{{name}}さん</p>
+    <a href="{% url 'shop0c:userInfo' %}">会員情報の確認</a><br>
+    <a href="{% url 'shop0c:updateUser' %}">会員情報の変更</a><br>
+    <a href="{% url 'shop0c:logout' %}">ログアウト</a><br>
+    {% else %}
+    <a href="{% url 'shop0c:login' %}">ログイン</a><br>
+    {% endif %}
+    <a href="to admin">管理者ページ（任意機能）</a><br>
+</body>
+</html>
