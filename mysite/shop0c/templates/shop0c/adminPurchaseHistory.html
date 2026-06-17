@@ -3,13 +3,13 @@
     <head>
         <meta charset="UTF-8">
         <title>購入履歴検索</title>
-        <link rel="stylesheet" type="text/css" href="{% static 'style.css' %}">
+        <link rel="stylesheet" type="text/css" href="{% static 'table.css' %}">
     </head>
 
     <body>
         <h2>購入履歴検索</h2>
 
-        <form action="{% url 'admin_purchase_history' %}" method="GET">
+        <form action="{% url 'shop0c:admin_purchase_history' %}" method="GET">
             <table>
                 {% for field in form %}
                     <tr>
@@ -28,7 +28,7 @@
         <hr>
 
         {% for purchase_history in purchase_history_list %}
-            <h3>注文ID：{{ purchase_history.purchase.purchase_id }}</h3>
+            <h3>注文ID：{{ purchase_history.purchase.Purchase_id }}</h3>
 
             <p>注文日：{{ purchase_history.purchase.booked_date }}</p>
             <p>会員ID：{{ purchase_history.purchase.user.user_id }}</p>
@@ -72,7 +72,7 @@
 
             {% if not purchase_history.purchase.cancel %}
                 <p>
-                    <a href="{% url 'purchase_cancel' purchase_history.purchase.purchase_id %}">キャンセル手続き</a>
+                    <a href="#">キャンセル手続き</a>
                 </p>
             {% endif %}
 
@@ -82,7 +82,7 @@
         {% endfor %}
 
         <p>
-            <a href="{% url 'admin_main' %}">管理者メインページへ</a>
+            <a href="{% url 'shop0c:admin_main' %}">管理者メインページへ</a>
         </p>
     </body>
 </html>
