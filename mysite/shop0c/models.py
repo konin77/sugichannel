@@ -1,6 +1,7 @@
 from django.db import models
 from django.core.validators import MinLengthValidator
-# Create your models here.
+
+
 
 class User (models.Model):
 
@@ -27,6 +28,7 @@ class User (models.Model):
             max_length=256
     )
 
+
 class Category(models.Model):
     class Meta:
         db_table = 'shopping_category'
@@ -40,6 +42,7 @@ class Category(models.Model):
             verbose_name='カテゴリ名',
             max_length=256
     )
+
 
 class Item(models.Model):
     class Meta:
@@ -79,6 +82,7 @@ class Item(models.Model):
             on_delete=models.CASCADE
     )
 
+
 class Shopcart(models.Model):
     class Meta:
         db_table = 'shopping_itemsincart'
@@ -100,6 +104,7 @@ class Shopcart(models.Model):
             verbose_name='会員ID',
             on_delete=models.CASCADE
     )
+
 
 class Purchase(models.Model):
     class Meta:
@@ -129,6 +134,7 @@ class Purchase(models.Model):
             on_delete=models.CASCADE
     )
 
+
 class Detail(models.Model):
     class Meta:
         db_table = 'shopping_purchasedetail'
@@ -152,6 +158,7 @@ class Detail(models.Model):
             verbose_name='注文ID',
             on_delete=models.CASCADE
     )
+
 
 class Admin(models.Model):
     class Meta:
