@@ -889,3 +889,72 @@ class AdminPurchaseHistory(View):
             "purchase_history_list": purchase_history_list,
         }
         return render(request, "shop0c/adminPurchaseHistory.html", context)
+    
+
+class AdminPurchaseCancel(View):
+    def get(self, request, purchase_id, *args, **kwargs):
+        if "admin_id" not in request.session:
+            return redirect("shop0c:admin_login")
+
+        purchase = Purchase.objects.filter(Purchase_id=purchase_id).first()
+
+        if purchase is None:
+            return redirect("shop0c:admin_purchase_history")
+
+        # すでにキャンセル済みの場合はエラーを表示
+        if purchase.cancel:
+            purchase_details = Detail.objects.filter(Purchase=purchase)
+            detail_list = []
+            total_price_all = 0
+            for detail in purchase_details:
+                total_price = detail.item.price * detail.amount
+                total_price_all += total_price
+                detail_list.append({
+                    "detail": detail,
+                    "item": detail.item,
+                    "amount": detail.amount,
+                    "total_price": total_price,
+                })
+            context = {
+                "purchase": purchase,
+                "detail_list": detail_list,
+                "total_price_all": total_price_all,
+                "error": "この注文はすでにキャンセル済みです。",
+            }
+            return render(request, "shop0c/adminPurchaseCancel.html", context)
+
+        purchase_details = Detail.objects.filter(Purchase=purchase)
+
+        detail_list = []
+        total_price_all = 0
+
+        for detail in purchase_details:
+            total_price = detail.item.price * detail.amount
+            total_price_all += total_price
+            detail_list.append({
+                "detail": detail,
+                "item": detail.item,
+                "amount": detail.amount,
+                "total_price": total_price,
+            })
+
+        context = {
+            "purchase": purchase,
+            "detail_list": detail_list,
+            "total_price_all": total_price_all,
+        }
+        return render(request, "shop0c/adminPurchaseCancel.html", context)
+
+    def post(self, request, purchase_id, *args, **kwargs):
+        if "admin_id" not in request.session:
+            return redirect("shop0c:admin_login")
+
+        purchase = Purchase.objects.filter(Purchase_id=purchase_id).first()
+
+        if purchase is None:
+            return redirect("shop0c:admin_purchase_history")
+
+        purchase.cancel = True
+        purchase.save()
+
+        return redirect("shop0c:admin_purchase_history")
