@@ -33,7 +33,7 @@
     <a href="{% url 'shop0c:login' %}">ショッピングカートを見る</a>
     {% endif %}
     <br>
-    <a href="look log">購入履歴（任意機能）</a><br>
+    <a href="{% url 'shop0c:purchase_history' %}">購入履歴</a><br>
     {% if login_flag == True %}
     <p>ようこそ{{name}}さん</p>
     <a href="{% url 'shop0c:userInfo' %}">会員情報の確認</a><br>
