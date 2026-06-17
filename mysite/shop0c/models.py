@@ -43,6 +43,10 @@ class Category(models.Model):
             max_length=256
     )
 
+    def __str__(self):
+        return self.name
+
+
 
 class Item(models.Model):
     class Meta:
