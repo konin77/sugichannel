@@ -458,6 +458,10 @@ a:hover::after { width: 100%; }
 .card-row .card h2 { margin: 0 0 10px; font-size: 18px; color: var(--ink); }
 .welcome { font-weight: 600; color: var(--green); margin: 0 0 10px; }
 
+/* セクション見出し（オススメ商品 など） */
+.section-head { display: flex; align-items: baseline; gap: 10px; margin: 32px 0 16px; }
+.section-title { font-size: 18px; font-weight: 700; color: var(--ink); }
+
 /* =========================================================================
    検索結果（searchResult.html）が使うカードグリッド
    ========================================================================= */
@@ -569,6 +573,27 @@ a:hover::after { width: 100%; }
 
 /* 管理一覧テーブルの操作リンクなど */
 .admin-toolbar { margin-bottom: 18px; }
+
+/* 管理：購入履歴カードの注文ヘッダー／メタ情報／フッター */
+.order-head { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
+.order-meta {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 4px 24px;
+  margin: 0 0 16px;
+}
+.order-meta div { display: flex; gap: 8px; }
+.order-meta dt { color: var(--ink-muted); min-width: 64px; margin: 0; font-weight: 600; }
+.order-meta dd { margin: 0; }
+.order-foot { display: flex; justify-content: space-between; align-items: center; gap: 18px; flex-wrap: wrap; margin-top: 14px; }
+
+/* ゴースト版リンクボタン（キャンセル手続き 等の控えめな操作） */
+a.link-btn--ghost {
+  background-color: transparent !important;
+  color: var(--orange-link) !important;
+  border: 2px solid var(--peach-border);
+}
+a.link-btn--ghost:hover { background-color: var(--peach-soft) !important; color: var(--orange-hover) !important; }
 
 /* 管理：インライン検索フォーム（カテゴリ／キーワード） */
 .admin-search select,
