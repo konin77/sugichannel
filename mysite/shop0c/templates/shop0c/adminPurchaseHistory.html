@@ -28,7 +28,7 @@
         <hr>
 
         {% for purchase_history in purchase_history_list %}
-            <h3>注文ID：{{ purchase_history.purchase.purchase_id }}</h3>
+            <h3>注文ID：{{ purchase_history.purchase.Purchase_id }}</h3>
 
             <p>注文日：{{ purchase_history.purchase.booked_date }}</p>
             <p>会員ID：{{ purchase_history.purchase.user.user_id }}</p>
