@@ -22,6 +22,7 @@ urlpatterns = [
     path('modifycart',views.Modifycart.as_view(),name='modifycart'),
     path('updatecart',views.Updatecart.as_view(),name='updatecart'),
     path('purchase/',views.Purchase_cart.as_view(),name='purchase'),
+    path('purchaseCommit/', views.PurchaseCommit.as_view(), name='purchase_commit'),
     path('updatedestination',views.Updatedestination.as_view(),name='updatedestination'),
 
     # --- 管理機能　--- #
