@@ -1,44 +1,239 @@
+/* =========================================================================
+   Sugi Channel — table.css （オレンジ×緑テーマ）
+   既存のオレンジ系ベースはそのまま維持し、
+   ・サイト共通レイアウト（ヘッダー / フッター）
+   ・searchResult を「お手本」にしたカード設計
+   ・ポジティブ操作（在庫あり / カート投入）用の緑アクセント
+   を追記しています。新しい配色は加えていません。
+   ========================================================================= */
+
+/* ---------- カラー変数（既存色 + 緑アクセントの整理） ---------- */
+:root {
+  --orange:        #FF8C00;  /* プライマリ（ボタン） */
+  --orange-link:   #E67E22;  /* 見出し・リンク */
+  --orange-sub:    #F39C12;  /* サブ・リンクボタン */
+  --orange-head:   #FFA726;  /* テーブルヘッダー */
+  --orange-hover:  #D35400;
+  --peach-border:  #F5D6A8;
+  --peach-row:     #FCE4C0;
+  --peach-soft:    #FFF3E0;
+  --cream:         #FFFDF7;
+  --ink:           #333;
+  --ink-sub:       #555;
+  --ink-muted:     #7A746C;
+
+  --green:         #5BA34A;  /* 緑アクセント（在庫あり / カート投入） */
+  --green-hover:   #4A8C3C;
+  --green-soft:    #EAF5E6;
+}
+
 /* ---------- リセット & ベース ---------- */
+* { box-sizing: border-box; }
+
 body {
   font-family: "Helvetica Neue", "Hiragino Sans", "Hiragino Kaku Gothic ProN", "Meiryo", sans-serif;
-  background-color: #FFFDF7;
-  color: #333;
-  line-height: 1.8;                /* 1.6 → 1.8 で余裕を持たせる */
-  font-size: 16px;                 /* ベースを16pxに明示 */
+  background-color: var(--cream);
+  color: var(--ink);
+  line-height: 1.8;
+  font-size: 16px;
   min-height: 100vh;
+  margin: 0;
 }
 
 /* ---------- 見出し（H1） ---------- */
 h1 {
-  font-size: 22px;                 /* 24px → 22px に少し抑える */
-  color: #E67E22;
-  border-left: 5px solid #F39C12;
+  font-size: 22px;
+  color: var(--orange-link);
+  border-left: 5px solid var(--orange-sub);
   padding-left: 12px;
   margin-bottom: 20px;
 }
 
-/* ---------- テーブル ---------- */
+/* =========================================================================
+   サイト共通レイアウト（base.html 用）
+   ========================================================================= */
+.site-header {
+  height: 60px;
+  background-color: var(--orange);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 24px;
+  box-shadow: 0 2px 6px rgba(120, 72, 16, 0.10);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.navbar-logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: #fff !important;
+  font-weight: 700;
+}
+.navbar-logo .logo-mark {
+  width: 34px;
+  height: 34px;
+  border-radius: 10px;
+  background: #fff;
+  color: var(--orange);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 20px;
+}
+.navbar-logo .logo-text { display: flex; flex-direction: column; line-height: 1.05; }
+.navbar-logo .logo-text small { font-size: 10px; opacity: 0.85; letter-spacing: 0.12em; font-weight: 600; }
+
+.navbar-menu {
+  list-style: none;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin: 0;
+  padding: 0;
+}
+
+.site-main {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 32px 24px 64px;
+}
+
+.site-footer {
+  border-top: 1px solid var(--peach-border);
+  background-color: #fff;
+  color: var(--ink-muted);
+  text-align: center;
+  font-size: 13px;
+  padding: 24px;
+}
+.site-footer a { font-size: 13px; }
+
+/* =========================================================================
+   カード（searchResult をお手本にした共通カード）
+   ========================================================================= */
+.card {
+  background-color: #fff;
+  border: 1px solid var(--peach-row);
+  border-radius: 10px;
+  box-shadow: 0 2px 6px rgba(120, 72, 16, 0.10);
+  overflow: hidden;
+}
+.card__body { padding: 24px; }
+
+/* ---------- バッジ（オレンジ×緑） ---------- */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 3px 12px;
+  border-radius: 25px;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.4;
+  white-space: nowrap;
+}
+.badge--rec    { background: var(--orange-head); color: #fff; }
+.badge--instock{ background: var(--green-soft);  color: var(--green); }
+.badge--out    { background: #FBEAE7;            color: #C0392B; }
+.badge--color  { background: var(--peach-row);   color: var(--orange-hover); }
+
+/* =========================================================================
+   商品詳細レイアウト（itemDetail.html）
+   ========================================================================= */
+.product-detail {
+  display: grid;
+  grid-template-columns: 320px 1fr;
+  gap: 28px;
+  align-items: start;
+}
+.product-detail__media {
+  aspect-ratio: 4 / 3;
+  background: var(--peach-soft);
+  border: 1px solid var(--peach-row);
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #F0B86C;
+  font-weight: 600;
+}
+.product-detail__badges { display: flex; gap: 8px; margin-bottom: 12px; }
+.product-detail__maker  { color: var(--ink-muted); font-size: 14px; margin: 0 0 2px; }
+.product-detail__name   { font-size: 24px; font-weight: 700; color: var(--ink); margin: 0 0 12px; }
+
+/* ---------- 価格 ---------- */
+.price { display: flex; align-items: baseline; gap: 2px; margin-bottom: 18px; }
+.price__num {
+  font-family: "SF Mono", "Menlo", "Hiragino Sans", monospace;
+  font-size: 32px;
+  font-weight: 700;
+  color: var(--orange-hover);
+}
+.price__yen { font-size: 16px; font-weight: 600; color: var(--ink); }
+
+/* ---------- 仕様（テーブルの代わりの定義リスト） ---------- */
+.spec {
+  margin: 0 0 22px;
+  border: 1px solid var(--peach-border);
+  border-radius: 10px;
+  overflow: hidden;
+}
+.spec__row {
+  display: grid;
+  grid-template-columns: 120px 1fr;
+}
+.spec__row + .spec__row { border-top: 1px solid var(--peach-row); }
+.spec__row dt {
+  background: var(--orange-head);
+  color: #fff;
+  font-weight: 600;
+  padding: 10px 16px;
+  margin: 0;
+}
+.spec__row dd { padding: 10px 16px; margin: 0; }
+
+/* ---------- 数量＋カート投入フォーム ---------- */
+.cart-form {
+  display: flex;
+  align-items: flex-end;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+.field { margin-bottom: 0; }
+.field.field--qty { width: 110px; }
+.field label { margin-bottom: 4px; }
+.field select { margin-bottom: 0; }
+
+.note { font-size: 13px; color: var(--ink-muted); margin-top: 14px; }
+.page-actions { margin-top: 28px; }
+
+/* =========================================================================
+   既存：テーブル / フォーム / ボタン / リンク（オレンジ系を維持）
+   ========================================================================= */
 thead th {
-  background-color: #FFA726;
+  background-color: var(--orange-head);
   color: #fff;
   padding: 12px 16px;
   text-align: left;
-  font-size: 16px;                 /* 14px → 16px */
+  font-size: 16px;
   font-weight: 600;
 }
-
 tbody td {
   padding: 12px 16px;
-  border-bottom: 1px solid #FCE4C0;
-  font-size: 16px;                 /* 14px → 16px */
+  border-bottom: 1px solid var(--peach-row);
+  font-size: 16px;
 }
 
-/* ---------- フォーム ---------- */
 label {
   display: block;
-  font-size: 16px;                 /* 14px → 16px */
+  font-size: 16px;
   font-weight: 600;
-  color: #555;
+  color: var(--ink-sub);
   margin-bottom: 4px;
 }
 
@@ -52,58 +247,80 @@ select,
 textarea {
   width: 100%;
   padding: 10px 14px;
-  border: 2px solid #F5D6A8;
+  border: 2px solid var(--peach-border);
   border-radius: 10px;
-  font-size: 16px;                 /* 14px → 16px */
+  font-size: 16px;
   background-color: #fff;
-  transition: border-color 0.2s;
+  transition: border-color 0.2s, box-shadow 0.2s;
   margin-bottom: 16px;
   outline: none;
 }
+input:focus, select:focus, textarea:focus {
+  border-color: var(--orange-sub);
+  box-shadow: 0 0 0 3px rgba(243, 156, 18, 0.30);
+}
 
-/* ---------- ボタン ---------- */
+/* 既定ボタン（オレンジ・プライマリ） */
 button,
 input[type="submit"] {
   display: inline-block;
   padding: 10px 28px;
-  background-color: #FF8C00;
+  background-color: var(--orange);
   color: #fff;
   border: none;
   border-radius: 25px;
-  font-size: 16px;                 /* 15px → 16px */
+  font-size: 16px;
   font-weight: 600;
   cursor: pointer;
   transition: background-color 0.2s, transform 0.1s;
   margin: 4px;
 }
+button:hover,
+input[type="submit"]:hover { background-color: var(--orange-hover); }
+button:active,
+input[type="submit"]:active { transform: translateY(1px); }
 
-/* ---------- ページ遷移リンク ---------- */
+/* カート投入は緑アクセント（オレンジ×緑） */
+input[type="submit"].btn-cart,
+button.btn-cart {
+  background-color: var(--green);
+}
+input[type="submit"].btn-cart:hover,
+button.btn-cart:hover { background-color: var(--green-hover); }
+
+button:disabled,
+input[type="submit"]:disabled { opacity: 0.5; cursor: not-allowed; }
+
+/* ページ遷移リンク */
 a.link-btn {
   display: inline-block;
   padding: 8px 20px;
-  background-color: #F39C12;
-  color: #fff;
+  background-color: var(--orange-sub);
+  color: #fff !important;
   border-radius: 25px;
-  font-size: 16px;                 /* 14px → 16px */
+  font-size: 16px;
   font-weight: 500;
   transition: background-color 0.2s;
 }
+a.link-btn::after { content: none; }
+a.link-btn:hover { background-color: var(--orange-hover); }
 
-/* ---------- テーブル ---------- */
+/* テーブル */
 table {
-  width: auto;                      /* 全体に広がらないように */
-  min-width: 60%;                   /* 最低幅（お好みで調整） */
+  width: auto;
+  min-width: 60%;
   max-width: 90%;
-  margin: 0 auto 24px auto;        /* 中央寄せ */
+  margin: 0 auto 24px auto;
   border-collapse: separate;
   border-spacing: 0;
   border-radius: 10px;
   overflow: hidden;
-  border: 1px solid #F5D6A8;
+  border: 1px solid var(--peach-border);
 }
-/* ---------- リンク（全aタグ共通） ---------- */
+
+/* リンク（全aタグ共通：下線アニメ） */
 a {
-  color: #E67E22;
+  color: var(--orange-link);
   font-size: 16px;
   font-weight: 600;
   text-decoration: none;
@@ -111,7 +328,6 @@ a {
   padding-bottom: 2px;
   transition: color 0.2s;
 }
-
 a::after {
   content: "";
   position: absolute;
@@ -119,43 +335,28 @@ a::after {
   bottom: 0;
   width: 0;
   height: 2px;
-  background-color: #FF8C00;
+  background-color: var(--orange);
   border-radius: 2px;
   transition: width 0.3s;
 }
+a:hover { color: var(--orange-hover); }
+a:hover::after { width: 100%; }
 
-a:hover {
-  color: #D35400;
-}
-
-a:hover::after {
-  width: 100%;
-}
-
-/* ---------- ナビバーのリンクは上書き ---------- */
+/* ナビバーのリンクは上書き */
 .navbar-menu li a {
   color: #fff;
   font-size: 14px;
   font-weight: 500;
   padding: 6px 12px;
   border-radius: 20px;
-  position: static;                /* 下線アニメを無効化 */
+  position: static;
   transition: background-color 0.2s;
 }
+.navbar-menu li a::after { content: none; }
+.navbar-menu li a:hover { background-color: rgba(255, 255, 255, 0.2); color: #fff; }
 
-.navbar-menu li a::after {
-  content: none;                   /* 下線を消す */
-}
-
-.navbar-menu li a:hover {
-  background-color: rgba(255, 255, 255, 0.2);
-  color: #fff;
-}
-
-.navbar-logo {
-  position: static;                /* ロゴにも下線を出さない */
-}
-
-.navbar-logo::after {
-  content: none;
+/* レスポンシブ */
+@media (max-width: 720px) {
+  .product-detail { grid-template-columns: 1fr; }
+  .navbar-logo .logo-text { display: none; }
 }
