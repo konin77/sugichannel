@@ -26,11 +26,11 @@
             <td>{{cart.item.price}}</td>
             <td>{{cart.amount}}</td>
             <form action="{% url 'shop0c:modifycart' %}" method="POST">
-                <td><input type="submit" value="修正"></td>
+                <td><input type="submit" class="btn-square" value="修正"></td>
                 <input type="hidden" name="modify" value="{{cart.id}}">
             </form>
             <form action="{% url 'shop0c:deletecart' %}" method="POST">
-                <td><input type="submit" value="削除"></td>
+                <td><input type="submit" class="btn-square" value="削除"></td>
                 <input type="hidden" name="delete" value="{{cart.id}}">
             </form>
         </tr>
@@ -38,7 +38,7 @@
     </table>
     合計{{sum}}円
     <form action="{% url 'shop0c:purchase' %}" method="POST">
-        <input type="submit" value="購入する（任意機能）">
+        <input type="submit" class="btn-square" value="購入する（任意機能）">
         <input type="hidden" name="sum" value="{{sum}}">
     </form>
     <a href="{% url 'shop0c:main' %}">商品検索へ</a>
