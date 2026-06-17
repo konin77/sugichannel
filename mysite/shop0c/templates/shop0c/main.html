@@ -1,18 +1,16 @@
-<!DOCTYPE html>
-{% load static %}
-<html lang="ja">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Top</title>
-    <link rel="stylesheet" type="text/css" href="{% static 'table.css' %}"/>
-</head>
-<body>
+{% extends "shop0c/base.html" %}
+
+{% block content %}
+
+<!-- ===== ヒーロー（検索エリア） ===== -->
+<div class="hero">
     <h1>商品の検索を行います</h1>
-    <br>
-    <form action="{% url 'shop0c:search' %}" method="POST">
-        <label for="items">カテゴリ：</label>
-            <select name="category" id="items">
+    <p>カテゴリやキーワードで商品を探そう</p>
+
+    <div class="search-box">
+        <form method="get" action="{% url 'shop0c:search' %}">
+            <label>カテゴリ：</label>
+            <select name="category">
                 <option value="all" selected>すべて</option>
                 <option value="1">家電</option>
                 <option value="2">パソコン・周辺機器</option>
@@ -22,10 +20,20 @@
                 <option value="7">帽子</option>
                 <option value="6">鞄</option>
             </select>
-            <label for="keywords">キーワード：</label>
-            <input type="text" name="keyword">
-            <input type="submit" class="btn-square" value="検索">
-    </form>
+
+            <label>キーワード：</label>
+            <input type="text" name="keyword" placeholder="商品名を入力...">
+
+            <button type="submit">検索</button>
+        </form>
+    </div>
+</div>
+
+<!-- ===== カードセクション ===== -->
+<div class="card-row">
+
+    <!-- ショッピング系 -->
+    <div class="card card-orange">
     <br>
     {% if login_flag == True  %}
     <a href="{% url 'shop0c:cart' %}">ショッピングカートを見る</a>
@@ -34,14 +42,22 @@
     {% endif %}
     <br>
     <a href="look log">購入履歴（任意機能）</a><br>
+    </div>
+
+    <!-- アカウント系 -->
+    <div class="card card-green">
     {% if login_flag == True %}
-    <p>ようこそ{{name}}さん</p>
-    <a href="{% url 'shop0c:userInfo' %}">会員情報の確認</a><br>
-    <a href="{% url 'shop0c:updateUser' %}">会員情報の変更</a><br>
-    <a href="{% url 'shop0c:logout' %}">ログアウト</a><br>
+        <h2>アカウント</h2>
+        <p class="welcome">ようこそ {{ name }} さん</p>
+        <a href="{% url 'shop0c:userInfo' %}">会員情報の確認</a>
+        <a href="{% url 'shop0c:updateUser' %}">会員情報の変更</a>
+        <a href="{% url 'shop0c:logout' %}">ログアウト</a>
     {% else %}
     <a href="{% url 'shop0c:login' %}">ログイン</a><br>
     {% endif %}
     <a href="to admin">管理者ページ（任意機能）</a><br>
-</body>
-</html>
+    </div>
+
+</div>
+
+{% endblock %}
