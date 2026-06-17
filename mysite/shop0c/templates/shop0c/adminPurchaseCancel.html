@@ -1,14 +1,12 @@
-{% load static %}
-<html>
-    <head>
-        <meta charset="UTF-8">
-        <title>キャンセル手続き</title>
-        <link rel="stylesheet" type="text/css" href="{% static 'style.css' %}">
-    </head>
+{% extends 'shop0c/adminbase.html' %}
 
-    <body>
-        <h2>キャンセル手続き</h2>
+{% block title %}キャンセル手続き{% endblock %}
 
+{% block content %}
+<h1>キャンセル手続き</h1>
+
+<div class="card">
+    <div class="card__body">
         {% if error %}
             <p>{{ error }}</p>
         {% endif %}
@@ -30,7 +28,7 @@
             {% endif %}
         </p>
 
-        <table border="1">
+        <table>
             <tr>
                 <th>商品ID</th>
                 <th>商品名</th>
@@ -40,7 +38,6 @@
                 <th>数量</th>
                 <th>合計金額</th>
             </tr>
-
             {% for detail in detail_list %}
                 <tr>
                     <td>{{ detail.item.item_id }}</td>
@@ -54,23 +51,21 @@
             {% endfor %}
         </table>
 
-        <p>注文合計金額：{{ total_price_all }}円</p>
+        <p class="cart-total">注文合計金額：<span class="num">{{ total_price_all }}</span>円</p>
 
         {% if not purchase.cancel %}
             <form action="{% url 'purchase_cancel' purchase.purchase_id %}" method="POST">
                 {% csrf_token %}
-                <p>
+                <div class="form-actions">
                     <input type="submit" value="キャンセルする">
-                </p>
+                </div>
             </form>
         {% endif %}
 
-        <p>
+        <p class="page-links">
             <a href="{% url 'admin_purchase_history' %}">購入履歴検索へ</a>
-        </p>
-
-        <p>
             <a href="{% url 'admin_main' %}">管理者メインページへ</a>
         </p>
-    </body>
-</html>
+    </div>
+</div>
+{% endblock %}

@@ -10,7 +10,7 @@
     <p>カテゴリやキーワードで商品を探そう</p>
 
     <div class="search-box">
-        <form method="post" action="{% url 'shop0c:search' %}">
+        <form method="POST" action="{% url 'shop0c:search' %}">
             <label>カテゴリ：</label>
             <select name="category">
                 <option value="all" selected>すべて</option>
@@ -60,8 +60,4 @@
     <a href="{% url 'shop0c:admin_login' %}">管理者ページ</a><br>
 </body>
 </html>
-    </div>
-
-</div>
-
 {% endblock %}
