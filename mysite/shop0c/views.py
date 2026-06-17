@@ -827,7 +827,7 @@ class AdminPurchaseHistory(View):
         if "admin_id" not in request.session:
             return redirect("shop0c:admin_login")
         
-        form = AdminPurchaseHistorySearchForm(request,)
+        form = AdminPurchaseHistorySearchForm(request.GET)
 
         purchases = Purchase.objects.all().order_by("-booked_date")
 
@@ -838,17 +838,20 @@ class AdminPurchaseHistory(View):
             cancel = form.cleaned_data["cancel"]
 
             if purchase_id is not None:
-                purchases = purchases.filter(purchase_id=purchase_id)
+                purchases = purchases.filter(Purchase_id=purchase_id)
 
             if user_id != "":
                 purchases = purchases.filter(user__user_id__contains=user_id)
 
             if item_name != "":
                 purchase_ids = Detail.objects.filter(
-                    item__name__contains=item_name
-                ).values_list("purchase_id", flat=True)
+                    item__name__icontains=item_name
+                ).values_list("Purchase_id", flat=True).distinct()
+                purchases = purchases.filter(Purchase_id__in=purchase_ids)
 
-                purchases = purchases.filter(purchase_id__in=purchase_ids)
+            # if item_name != "":
+            #     purchase_ids = Detail.objects.filter(item__name__icontains=item_name).values_list("purchase_detail_id", flat=True)
+            #     purchases = purchases.filter(Purchase_id__in=purchase_ids)
 
             if cancel == "not_cancel":
                 purchases = purchases.filter(cancel=False)
@@ -859,11 +862,30 @@ class AdminPurchaseHistory(View):
         purchase_history_list = []
 
         for purchase in purchases:
-            purchase_details = Detail.objects.filter(purchase=purchase)
+            purchase_details = Detail.objects.filter(Purchase=purchase)
 
             detail_list = []
             total_price_all = 0
 
             for detail in purchase_details:
-                total_price = detail.item.price * detail.amount
-                
+                total_price = detail.item.price * detail.amount #カート内の商品ごとの合計金額
+                total_price_all += total_price
+
+                detail_list.append({
+                    "detail": detail,
+                    "item": detail.item,
+                    "amount": detail.amount,
+                    "total_price": total_price,
+                })
+
+            purchase_history_list.append({
+                "purchase": purchase,
+                "detail_list": detail_list,
+                "total_price_all": total_price_all,
+            })
+
+        context = {
+            "form": form,
+            "purchase_history_list": purchase_history_list,
+        }
+        return render(request, "shop0c/adminPurchaseHistory.html", context)

@@ -35,4 +35,7 @@ urlpatterns = [
     path("adminItemRegister/", views.ItemRegister.as_view(), name="item_register"),
     path("adminItemUpdate/<int:item_id>/", views.ItemUpdate.as_view(), name="item_update"),
     path("adminItemDelete/<int:item_id>/", views.ItemDelete.as_view(), name="item_delete"),
+
+    path('adminPurchaseHistory/', views.AdminPurchaseHistory.as_view(), name="admin_purchase_history"),
+    # path('adminPurchaseCancel/<int:purchase_id>', views.AdminPurchaseCancel.as_view(), name='admin_purchase_cancel')
 ]

@@ -7,7 +7,7 @@
 
 <div class="card admin-toolbar">
     <div class="card__body">
-        <form action="{% url 'admin_purchase_history' %}" method="GET">
+        <form action="{% url 'shop0c:admin_purchase_history' %}" method="GET">
             <table>
                 {% for field in form %}
                     <tr>
@@ -29,10 +29,8 @@
     <div class="card__body">
         <h2 style="margin-top:0;">注文ID：{{ purchase_history.purchase.purchase_id }}</h2>
 
-        <p>注文日：{{ purchase_history.purchase.booked_date }}</p>
-        <p>会員ID：{{ purchase_history.purchase.user.user_id }}</p>
-        <p>会員名：{{ purchase_history.purchase.user.name }}</p>
-        <p>配送先：{{ purchase_history.purchase.destination }}</p>
+        {% for purchase_history in purchase_history_list %}
+            <h3>注文ID：{{ purchase_history.purchase.Purchase_id }}</h3>
 
         <p>
             キャンセル状態：
