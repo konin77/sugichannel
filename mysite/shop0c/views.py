@@ -827,7 +827,7 @@ class AdminPurchaseHistory(View):
         if "admin_id" not in request.session:
             return redirect("shop0c:admin_login")
         
-        form = AdminPurchaseHistorySearchForm(request,GET)
+        form = AdminPurchaseHistorySearchForm(request,)
 
         purchases = Purchase.objects.all().order_by("-booked_date")
 
