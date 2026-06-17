@@ -4,10 +4,8 @@ from django.views.generic import View
 from shop0c.models import User, Item, Shopcart, Purchase, Detail, Admin, Category
 from shop0c.forms import LoginForm, RegistUserForm ,UpdateUserForm, AdminLoginForm, ItemRegisterForm, ItemUpdateForm, PurchaseForm
 #from django.contrib.auth import logout
+from .forms import LoginForm, ItemRegisterForm, ItemUpdateForm, AdminPurchaseHistorySearchForm
 
-from .forms import LoginForm #, ItemRegisterForm, ItemUpdateForm #, AdminPurchaseHistorySearchForm
-
-# Create your views here.
 
 def index(request):
     return render(request,'shop0c/index.html')
@@ -448,41 +446,40 @@ class Purchase_cart(View):
         return render(request, 'shop0c/purchase.html', context)
 
     def post(self, request):
-        print("① POST来た")
+        form = PurchaseForm(request.POST)
 
-        sum = request.POST.get('sum')
+        if not form.is_valid():
+            return redirect('shop0c:purchase')
+
         user = User.objects.get(user_id=request.session.get('user_id'))
-
         carts = Shopcart.objects.filter(user=user)
-        print("② carts取得")
 
         if not carts.exists():
-            print("③ cart空")
             return redirect("shop0c:cart")
 
-        max_id_o = Purchase.objects.order_by('-Purchase_id').first()
-        if max_id_o:
-            max_purchase_id = int(max_id_o.Purchase_id) + 1
+        max_id_obj = Purchase.objects.order_by('-Purchase_id').first()
+        if max_id_obj:
+            max_purchase_id = int(max_id_obj.Purchase_id) + 1
         else:
             max_purchase_id = 1
 
+        destination = form.cleaned_data["destination"]
+
         new_purchase = Purchase(
             Purchase_id=max_purchase_id,
-            destination=user.address,
+            destination=destination,
             user=user
         )
         new_purchase.save()
-        print("④ purchase保存")
 
-        max_detail_o = Detail.objects.order_by('-purchase_detail_id').first()
-        if max_detail_o:
-            next_detail_id = int(max_detail_o.purchase_detail_id) + 1
+        max_detail_obj = Detail.objects.order_by('-purchase_detail_id').first()
+
+        if max_detail_obj:
+            next_detail_id = int(max_detail_obj.purchase_detail_id) + 1
         else:
             next_detail_id = 1
 
         for cart in carts:
-            print("⑤ ループ入った")
-
             new_detail = Detail(
                 purchase_detail_id=next_detail_id,
                 amount=cart.amount,
@@ -490,18 +487,9 @@ class Purchase_cart(View):
                 item=cart.item
             )
             new_detail.save()
-            print("⑥ detail保存")
 
             cart.delete()
-            print("⑦ cart削除")
-
             next_detail_id += 1
-
-        print("⑧ 最後まで来た")
-
-        context = {
-            "purchase": new_purchase,
-        }
 
         return redirect('shop0c:purchase_commit')
 
@@ -515,72 +503,48 @@ class PurchaseCommit(View):
         }
         return render(request, 'shop0c/purchaseCommit.html', context)
 
-# class Purchase_cart(View):
-#     def get(self, request):
-#         pass
 
-#     def post(self, request):
-#         sum = request.POST['sum']
-#         new_purchase = Purchase()
-#         user = User.objects.get(user_id=request.session.get('user_id'))
-#         max_id_o = Purchase.objects.order_by('-Purchase_id').first()
-#         max_id = int(max_id_o.Purchase_id)+1
-#         new_purchase.Purchase_id = max_id
-#         new_purchase.destination = user.address
-#         new_purchase.user = user
-#         new_purchase.save()
+class PurchaseHistory(View):
+    def get(self, request, *args, **kwargs):
+        if "user_id" not in request.session:
+            return redirect("login")
 
-#         carts = Shopcart.objects.filter(user=user)
+        user_id = request.session["user_id"]
+        user = User.objects.get(user_id=user_id)
 
-#         if not carts.exists():
-#             return redirect("shop0c:cart")
-        
-#         details = []
+        purchases = Purchase.objects.filter(user=user).order_by("-booked_date")
 
-#         for cart in carts:
+        purchase_history_list = []
 
-#             new_detail = Detail()
-#             max_id_o = Detail.objects.order_by('-purchase_detail_id').first()
-#             max_id = int(max_id_o.purchase_detail_id)+10
-#             new_detail.purchase_detail_id = max_id
-#             new_detail.amount = cart.amount
-#             new_detail.Purchase = new_purchase
-#             new_detail.item = cart.item
-#             cart.delete()
-#             new_detail.save()
-#             details.append(new_detail)
-        
-#         form = PurchaseForm(initial={
-#             "destination": user.address,
-#             "payment_mothod": "代引き"
-#         })
+        for purchase in purchases:
+            purchase_details = Detail.objects.filter(Purchase=purchase)
 
-#         context = {
-#             "form": form,
-#             'new_purchase':new_purchase,
-#             'details':details,
-#             'sum':sum,
-#             #'item':item,
-#         }
+            detail_list = []
+            total_price_all = 0
 
-#         details = []
-#         return render(request,'shop0c/purchase.html',context)
+            for detail in purchase_details:
+                total_price = detail.item.price * detail.amount
+                total_price_all += total_price
 
+                detail_list.append({
+                    "detail": detail,
+                    "item": detail.item,
+                    "amount": detail.amount,
+                    "total_price": total_price,
+                })
 
-class Updatedestination(View):
-    def get(self, request):
-        pass
-    def post(self, request):
-        destination = request.POST['destination']
-        purchase_id = request.POST['purchase_id']
-        purchase = Purchase.objects.get(Purchase_id=purchase_id)
-        purchase.destination = destination
-        purchase.save()
+            purchase_history_list.append({
+                "purchase": purchase,
+                "detail_list": detail_list,
+                "total_price_all": total_price_all,
+            })
+
         context = {
-            'destination':destination
+            "purchase_history_list": purchase_history_list,
+            "login_user_id": request.session.get("user_id"),
+            "login_name": request.session.get("name"),
         }
-
-        return render(request,'shop0c/updatedestination.html',context)
+        return render(request, "shop0c/purchaseHistory.html", context)
 
 
 ###########################
@@ -856,3 +820,50 @@ class ItemDelete(View):
         item.delete()
 
         return redirect("shop0c:item_list")
+    
+
+class AdminPurchaseHistory(View):
+    def get(self, request, *args, **kwargs):
+        if "admin_id" not in request.session:
+            return redirect("shop0c:admin_login")
+        
+        form = AdminPurchaseHistorySearchForm(request,GET)
+
+        purchases = Purchase.objects.all().order_by("-booked_date")
+
+        if form.is_valid():
+            purchase_id = form.cleaned_data["purchase_id"]
+            user_id = form.cleaned_data["user_id"]
+            item_name = form.cleaned_data["item_name"]
+            cancel = form.cleaned_data["cancel"]
+
+            if purchase_id is not None:
+                purchases = purchases.filter(purchase_id=purchase_id)
+
+            if user_id != "":
+                purchases = purchases.filter(user__user_id__contains=user_id)
+
+            if item_name != "":
+                purchase_ids = Detail.objects.filter(
+                    item__name__contains=item_name
+                ).values_list("purchase_id", flat=True)
+
+                purchases = purchases.filter(purchase_id__in=purchase_ids)
+
+            if cancel == "not_cancel":
+                purchases = purchases.filter(cancel=False)
+
+            if cancel == "cancel":
+                purchases = purchases.filter(cancel=True)
+
+        purchase_history_list = []
+
+        for purchase in purchases:
+            purchase_details = Detail.objects.filter(purchase=purchase)
+
+            detail_list = []
+            total_price_all = 0
+
+            for detail in purchase_details:
+                total_price = detail.item.price * detail.amount
+                

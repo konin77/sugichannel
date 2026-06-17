@@ -43,6 +43,7 @@
     <a href="{% url 'shop0c:login' %}">ショッピングカートを見る</a>
     {% endif %}
     <br>
+    <a href="{% url 'shop0c:purchase_history' %}">購入履歴</a><br>
     <a href="look log">購入履歴（任意機能）</a><br>
     </div>
 
@@ -57,15 +58,12 @@
     {% else %}
     <a href="{% url 'shop0c:login' %}">ログイン</a><br>
     {% endif %}
-<<<<<<< HEAD
     <a href="{% url 'shop0c:admin_login' %}">管理者ページ</a><br>
 </body>
 </html>
-=======
     <a href="to admin">管理者ページ（任意機能）</a><br>
     </div>
 
 </div>
 
->>>>>>> 5d569d0475b00d264d467db6a89a4b4c9c486bd6
 {% endblock %}
