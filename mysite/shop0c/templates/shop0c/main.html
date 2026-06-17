@@ -30,20 +30,45 @@
         </form>
     </div>
 </div>
+<!-- ===== オススメ商品 ===== -->
+<div class="section-head">
+    <span class="section-title">オススメ商品</span>
+    <span class="badge badge--rec">ピックアップ</span>
+</div>
 
+<div class="product-grid">
+    {% for item in recommended_items %}
+    <div class="product-card">
+        <div class="product-card__thumb">
+            <span class="product-card__noimage">画像準備中</span>
+        </div>
+        <div class="product-card__body">
+            <p class="product-card__maker">{{ item.manufacturer }}</p>
+            <a href="{% url 'shop0c:detail' pk=item.item_id %}" class="product-card__name">{{ item.name }}</a>
+            <div class="product-card__tags">
+                <span class="tag tag-color">{{ item.color }}</span>
+            </div>
+            <p class="product-card__price">¥{{ item.price }}</p>
+            <a href="{% url 'shop0c:detail' pk=item.item_id %}" class="btn-primary">詳細を見る</a>
+        </div>
+    </div>
+    {% empty %}
+    <p class="cart-empty" style="grid-column: 1 / -1;">オススメ商品はまだありません。</p>
+    {% endfor %}
+</div>
 <!-- ===== カードセクション ===== -->
 <div class="card-row">
 
     <!-- ショッピング系 -->
     <div class="card card-orange">
-    <br>
-    {% if login_flag == True  %}
-    <a href="{% url 'shop0c:cart' %}">ショッピングカートを見る</a>
-    {% else %}
-    <a href="{% url 'shop0c:login' %}">ショッピングカートを見る</a>
-    {% endif %}
-    <br>
-    <a href="{% url 'shop0c:purchase_history' %}">購入履歴</a><br>
+        {% if login_flag == True  %}
+        <h2>ショッピング</h2>
+            <a href="{% url 'shop0c:cart' %}">ショッピングカートを見る</a>
+        {% else %}
+        <a href="{% url 'shop0c:login' %}">ショッピングカートを見る</a>
+        {% endif %}
+        <br>
+        <a href="{% url 'shop0c:purchase_history' %}">購入履歴</a><br>
     </div>
 
     <!-- アカウント系 -->
