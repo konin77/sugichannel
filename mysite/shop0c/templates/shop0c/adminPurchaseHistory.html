@@ -72,7 +72,7 @@
 
             {% if not purchase_history.purchase.cancel %}
                 <p>
-                    <a href="#">キャンセル手続き</a>
+                    <a href="{% url 'shop0c:admin_purchase_cancel' purchase_history.purchase.Purchase_id %}">キャンセル手続き</a>
                 </p>
             {% endif %}
 

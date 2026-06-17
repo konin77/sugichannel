@@ -1,0 +1,86 @@
+{% extends 'shop0c/adminbase.html' %}
+
+{% block title %}注文キャンセル確認{% endblock %}
+
+{% block content %}
+<h1>注文キャンセル確認</h1>
+
+<div class="card narrow">
+    <div class="card__body">
+
+        {% if error %}
+            <p class="error">{{ error }}</p>
+        {% endif %}
+
+        <h2 style="margin-top:0;">注文ID：{{ purchase.Purchase_id }}</h2>
+
+        <table>
+            <tr>
+                <th>注文日</th>
+                <td>{{ purchase.booked_date }}</td>
+            </tr>
+            <tr>
+                <th>会員ID</th>
+                <td>{{ purchase.user.user_id }}</td>
+            </tr>
+            <tr>
+                <th>会員名</th>
+                <td>{{ purchase.user.name }}</td>
+            </tr>
+            <tr>
+                <th>配送先</th>
+                <td>{{ purchase.destination }}</td>
+            </tr>
+            <tr>
+                <th>キャンセル状態</th>
+                <td>
+                    {% if purchase.cancel %}
+                        キャンセル済み
+                    {% else %}
+                        未キャンセル
+                    {% endif %}
+                </td>
+            </tr>
+        </table>
+
+        <h3>注文明細</h3>
+        <table>
+            <tr>
+                <th>商品ID</th>
+                <th>商品名</th>
+                <th>色</th>
+                <th>メーカー</th>
+                <th>単価</th>
+                <th>数量</th>
+                <th>合計金額</th>
+            </tr>
+            {% for detail in detail_list %}
+                <tr>
+                    <td>{{ detail.item.item_id }}</td>
+                    <td>{{ detail.item.name }}</td>
+                    <td>{{ detail.item.color }}</td>
+                    <td>{{ detail.item.manufacturer }}</td>
+                    <td>{{ detail.item.price }}円</td>
+                    <td>{{ detail.amount }}</td>
+                    <td>{{ detail.total_price }}円</td>
+                </tr>
+            {% endfor %}
+        </table>
+
+        <p class="cart-total">注文合計金額：<span class="num">{{ total_price_all }}</span>円</p>
+
+        <p>この注文をキャンセルしますか？</p>
+
+        <form action="{% url 'shop0c:admin_purchase_cancel' purchase.Purchase_id %}" method="POST">
+            {% csrf_token %}
+            <div class="form-actions">
+                <input type="submit" value="キャンセルする">
+            </div>
+        </form>
+
+        <p class="page-links">
+            <a href="{% url 'shop0c:admin_purchase_history' %}">購入履歴一覧へ</a>
+        </p>
+    </div>
+</div>
+{% endblock %}
