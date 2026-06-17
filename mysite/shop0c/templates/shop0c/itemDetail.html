@@ -1,57 +1,87 @@
-<!DOCTYPE html>
-{% load static %}
-<html lang="ja">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>商品詳細</title>
-    <link rel="stylesheet" type="text/css" href="{% static 'table.css' %}"/>
-</head>
-<body>
-    <h1>商品の詳細表示</h1>
-    <table>
-        <tr>
-            <th>商品名</th>
-            <td>{{item.name}}</td>
-        </tr>
-        <tr>
-            <th>商品の色</th>
-            <td>{{item.color}}</td>
-        </tr>
-        <tr>
-            <th>メーカー名</th>
-            <td>{{item.manufacturer}}</td>
-        </tr>
-        <tr>
-            <th>価格</th>
-            <td>{{item.price}}</td>
-        </tr>
-        <tr>
-            <th>在庫数</th>
-            <td>{{item.stock}}</td>
-        </tr>
-    </table>
-    {% if is_login == True %}
-    <form action="{% url 'shop0c:cart' %}" method="POST">
-    {% else %}
-    <form action="{% url 'shop0c:login' %}" method="GET">
-    {% endif %}
-        <input type="hidden" name="item_id" value="{{item.item_id}}">
-        <label for="amounts">数量：</label>
-            <select name="amount" id="amounts">
-                <option value="1" selected>1</option>
-                <option value="2">2</option>
-                <option value="3">3</option>
-                <option value="4">4</option>
-                <option value="5">5</option>
-                <option value="6">6</option>
-                <option value="7">7</option>
-                <option value="8">8</option>
-                <option value="9">9</option>
-            </select>
-            <input type="submit" class="btn-square" class="btn-square" value="ショッピングカートに入れる">
-    </form>
-    <p>※ログインしていない状態では、ボタンのクリック後、<a href="{% url 'shop0c:login' %}">ログイン画面</a>に転送される。</p>
-</body>
-<a href="{% url 'shop0c:main' %}">商品検索へ</a>
-</html>
+{% extends 'shop0c/base.html' %}
+
+{% block title %}商品詳細{% endblock %}
+
+{% block content %}
+<h1>商品の詳細表示</h1>
+
+<div class="card">
+    <div class="card__body">
+        <div class="product-detail">
+
+            <div class="product-detail__media">商品画像</div>
+
+            <div class="product-detail__info">
+                <div class="product-detail__badges">
+                    {% if item.recommended %}
+                    <span class="badge badge--rec">オススメ</span>
+                    {% endif %}
+                    {% if item.stock > 0 %}
+                    <span class="badge badge--instock">在庫あり</span>
+                    {% else %}
+                    <span class="badge badge--out">在庫なし</span>
+                    {% endif %}
+                    <span class="badge badge--color">{{ item.color }}</span>
+                </div>
+
+                <p class="product-detail__maker">{{ item.manufacturer }}</p>
+                <h2 class="product-detail__name">{{ item.name }}</h2>
+
+                <div class="price">
+                    <span class="price__num">{{ item.price }}</span>
+                    <span class="price__yen">円</span>
+                </div>
+
+                <dl class="spec">
+                    <div class="spec__row">
+                        <dt>商品の色</dt>
+                        <dd>{{ item.color }}</dd>
+                    </div>
+                    <div class="spec__row">
+                        <dt>メーカー名</dt>
+                        <dd>{{ item.manufacturer }}</dd>
+                    </div>
+                    <div class="spec__row">
+                        <dt>在庫数</dt>
+                        <dd>{{ item.stock }} 点</dd>
+                    </div>
+                </dl>
+
+                {% if is_login == True %}
+                <form class="cart-form" action="{% url 'shop0c:cart' %}" method="POST">
+                {% else %}
+                <form class="cart-form" action="{% url 'shop0c:login' %}" method="GET">
+                {% endif %}
+                    <input type="hidden" name="item_id" value="{{ item.item_id }}">
+                    <div class="field field--qty">
+                        <label for="amounts">数量：</label>
+                        <select name="amount" id="amounts">
+                            <option value="1" selected>1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                            <option value="6">6</option>
+                            <option value="7">7</option>
+                            <option value="8">8</option>
+                            <option value="9">9</option>
+                        </select>
+                    </div>
+                    <input type="submit" class="btn-cart" value="ショッピングカートに入れる">
+                </form>
+
+                {% if not is_login %}
+                <p class="note">
+                    ※ログインしていない状態では、ボタンのクリック後、<a href="{% url 'shop0c:login' %}">ログイン画面</a>に転送されます。
+                </p>
+                {% endif %}
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<div class="page-actions">
+    <a class="link-btn" href="{% url 'shop0c:main' %}">← 商品検索へ</a>
+</div>
+{% endblock %}

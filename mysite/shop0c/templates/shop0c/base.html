@@ -1,0 +1,42 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}COSMOS{% endblock %}</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'table.css' %}"/>
+</head>
+<body>
+    <header class="site-header">
+        <a class="navbar-logo" href="{% url 'shop0c:main' %}">
+            <span class="logo-mark">C</span>
+            <span class="logo-text">
+                COSMOS
+                <small>COSMOS Shop</small>
+            </span>
+        </a>
+        <nav>
+            <ul class="navbar-menu">
+                <li><a href="{% url 'shop0c:main' %}">商品検索</a></li>
+                {% if login_flag %}
+                <li><a href="{% url 'shop0c:cart' %}">カート</a></li>
+                <li><a href="{% url 'shop0c:userInfo' %}">会員情報</a></li>
+                <li><a href="{% url 'shop0c:logout' %}">ログアウト</a></li>
+                {% else %}
+                <li><a href="{% url 'shop0c:login' %}">カート</a></li>
+                <li><a href="{% url 'shop0c:login' %}">ログイン</a></li>
+                {% endif %}
+            </ul>
+        </nav>
+    </header>
+
+    <main class="site-main">
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer class="site-footer">
+        <p>© COSMOS Shop</p>
+    </footer>
+</body>
+</html>
