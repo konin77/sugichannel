@@ -1,61 +1,53 @@
-<!DOCTYPE html>
-{% load static %}
-<html lang="ja">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>会員登録の確認</title>
-    <link rel="stylesheet" type="text/css" href="{% static 'table.css' %}"/>
-</head>
-<body>
-    <h1>以下の情報で登録しますか？</h1>
-    <br>
-    <form action="{% url 'shop0c:confirmregister' %}" method="POST">
-        {% csrf_token %}
-        <table>
+{% extends 'shop0c/base.html' %}
+
+{% block title %}会員登録の確認{% endblock %}
+
+{% block content %}
+<h1>以下の情報で登録しますか？</h1>
+
+<div class="card narrow">
+    <div class="card__body">
+        <form action="{% url 'shop0c:confirmregister' %}" method="POST">
+            {% csrf_token %}
+            <table>
                 <tr>
                     <th>会員ID：</th>
                     <td>
                         {{id}}<input type="hidden" name="id" value="{{id}}">
                     </td>
-                    
                 </tr>
                 <tr>
                     <th>パスワード：</th>
                     <td>
-                            {% for i in password%}
-                            *
-                            {% endfor %}
-                            <input type="hidden" name="password" value="{{password}}">
+                        {% for i in password%}
+                        *
+                        {% endfor %}
+                        <input type="hidden" name="password" value="{{password}}">
                     </td>
-                    
                 </tr>
                 <tr>
                     <th>お名前：</th>
                     <td>
                         {{name}}<input type="hidden" name="name" value="{{name}}">
                     </td>
-                    
                 </tr>
                 <tr>
                     <th>ご住所：</th>
                     <td>
                         {{address}}<input type="hidden" name="address" value="{{address}}">
                     </td>
-                    
                 </tr>
-            <tr>
-                <td>
-                    <div style="text-align:center">
-                    <input type="submit" class="btn-square" value="登録確認">
-                    </div>
-                </td>
-            </tr>
-            
-        </table>
-        
-    </form>
-    <br>
-    <a href="{% url 'shop0c:main' %}">商品検索へ</a>
-</body>
-</html>
+                <tr>
+                    <td>
+                        <div class="form-actions">
+                            <input type="submit" class="btn-square" value="登録確認">
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        </form>
+
+        <p class="page-links"><a href="{% url 'shop0c:main' %}">商品検索へ</a></p>
+    </div>
+</div>
+{% endblock %}

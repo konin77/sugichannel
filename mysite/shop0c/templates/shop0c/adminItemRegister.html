@@ -1,21 +1,18 @@
-{% load static %}
-<html>
-    <head>
-        <meta charset="UTF-8">
-        <title>商品登録</title>
-        <link rel="stylesheet" type="text/css" href="{% static 'table.css' %}">
-    </head>
+{% extends 'shop0c/adminbase.html' %}
 
-    <body>
-        <h2>商品登録</h2>
+{% block title %}商品登録{% endblock %}
 
+{% block content %}
+<h1>商品登録</h1>
+
+<div class="card narrow">
+    <div class="card__body">
         {% if error %}
             <p>{{ error }}</p>
         {% endif %}
 
         <form action="{% url 'shop0c:item_register' %}" method="POST">
             {% csrf_token %}
-
             <table>
                 {% for field in form %}
                 <tr>
@@ -25,18 +22,15 @@
                 </tr>
                 {% endfor %}
             </table>
-
-            <p>
-                <input type="submit" value="登録"
-            </p>
+            <div class="form-actions">
+                <input type="submit" value="登録">
+            </div>
         </form>
 
-        <p>
+        <p class="page-links">
             <a href="{% url 'shop0c:item_list' %}">商品一覧へ</a>
-        </p>
-
-        <p>
             <a href="{% url 'shop0c:admin_main' %}">管理者メインページへ</a>
         </p>
-    </body>
-</html>
+    </div>
+</div>
+{% endblock %}

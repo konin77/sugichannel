@@ -1,19 +1,17 @@
-{% load static %}
-<html>
-    <head>
-        <meta charset="UTF-8">
-        <title>商品削除の確認</title>
-        <link rel="stylesheet" type="text/css" href="{% static 'table.css' %}">
-    </head>
+{% extends 'shop0c/adminbase.html' %}
 
-    <body>
-        <h2>以下の商品を削除しますか？</h2>
+{% block title %}商品削除の確認{% endblock %}
 
+{% block content %}
+<h1>以下の商品を削除しますか？</h1>
+
+<div class="card narrow">
+    <div class="card__body">
         {% if error %}
             <p>{{ error }}</p>
         {% endif %}
 
-        <table border="1">
+        <table>
             <tr>
                 <th>商品ID</th>
                 <td>{{ item.item_id }}</td>
@@ -46,16 +44,12 @@
 
         <form action="{% url 'shop0c:item_delete' item.item_id %}" method="POST">
             {% csrf_token %}
-            <p>
+            <div class="form-actions">
                 <input type="submit" value="削除">
-            </p>
-        </form> 
-        <p>
-            <a href="{% url 'shop0c:item_list' %}">商品一覧へ</a>
-        </p>
-        
+            </div>
+        </form>
 
-
-
-    </body>
-</html>
+        <p class="page-links"><a href="{% url 'shop0c:item_list' %}">商品一覧へ</a></p>
+    </div>
+</div>
+{% endblock %}

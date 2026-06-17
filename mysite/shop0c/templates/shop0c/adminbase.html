@@ -1,0 +1,32 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}COSMOS 管理画面{% endblock %}</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'table.css' %}"/>
+</head>
+<body>
+    <header class="admin-header">
+        <div class="admin-header__brand">
+            <span class="admin-mark">C</span>
+            <span class="admin-title">COSMOS<small>管理画面</small></span>
+        </div>
+        <nav class="admin-nav">
+            <a href="{% url 'shop0c:admin_main' %}">管理メイン</a>
+            <a href="{% url 'shop0c:item_list' %}">商品一覧</a>
+            <a href="{% url 'shop0c:item_register' %}">商品登録</a>
+            <a href="{% url 'shop0c:admin_logout' %}">ログアウト</a>
+        </nav>
+    </header>
+
+    <main class="site-main">
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer class="site-footer">
+        <p>© COSMOS Shop 管理画面</p>
+    </footer>
+</body>
+</html>

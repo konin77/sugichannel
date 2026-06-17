@@ -1,40 +1,33 @@
-<!DOCTYPE html>
-{% load static %}
-<html lang="ja">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>検索結果</title>
-    <link rel="stylesheet" type="text/css" href="{% static 'table.css' %}"/>
-</head>
-<body>
-    <h1>キーワード"{{keyword}}"カテゴリ"{{category_name}}"の検索結果</h1>
-    <table>
-        
-        <tr>
-            <th>商品名</th>
-            <th>商品の色</th>
-            <th>メーカー名</th>
-            <th>価格</th>
-        </tr>
-        <tr>
-    {% for item in items %}
-            <td>
-                <a href="{% url 'shop0c:detail' pk=item.item_id %}">{{item.name}}</a>
-            </td>
-            <td>
-                {{item.color}}
-            </td>
-            <td>
-                {{item.manufacturer}}
-            </td>
-            <td>
-                {{item.price}}
-            </td>
-        </tr>
-    {% endfor %}
-    </table>
-    <br>
-    <a href="{% url 'shop0c:main' %}">商品検索へ</a>
-</body>
-</html>
+{% extends "shop0c/base.html" %}
+
+{% block title %}検索結果{% endblock %}
+
+{% block content %}
+<div class="page">
+
+    <h1>キーワード"{{ keyword }}" カテゴリ"{{ category_name }}"の検索結果</h1>
+    <p class="result-count">{{ items|length }}件の商品が見つかりました</p>
+
+    <div class="product-grid">
+        {% for item in items %}
+        <div class="product-card">
+            <div class="product-card__thumb">
+                <span class="product-card__noimage">画像準備中</span>
+            </div>
+            <div class="product-card__body">
+                <p class="product-card__maker">{{ item.manufacturer }}</p>
+                <a href="{% url 'shop0c:detail' pk=item.item_id %}" class="product-card__name">{{ item.name }}</a>
+                <div class="product-card__tags">
+                    <span class="tag tag-color">{{ item.color }}</span>
+                </div>
+                <p class="product-card__price">¥{{ item.price }}</p>
+                <a href="{% url 'shop0c:detail' pk=item.item_id %}" class="btn-primary">詳細を見る</a>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <p class="back-link"><a href="{% url 'shop0c:main' %}">← 商品検索へ戻る</a></p>
+
+</div>
+{% endblock %}

@@ -1,20 +1,16 @@
-{% load static %}
-<html>
-    <head>
-        <meta charset="UTF-8">
-        <title>商品一覧</title>
-        <link rel="stylesheet" type="text/css" href="{% static 'table.css' %}">
-    </head>
+{% extends 'shop0c/adminbase.html' %}
 
-    <body>
-        <h2>商品一覧</h2>
+{% block title %}商品一覧{% endblock %}
 
+{% block content %}
+<h1>商品一覧</h1>
+
+<div class="card admin-toolbar">
+    <div class="card__body admin-search">
         <form action="{% url 'shop0c:item_list' %}" method="GET">
-
             カテゴリ：
             <select name="category_id">
                 <option value="all">すべて</option>
-
                 {% for category in categories %}
                     {% if category.category_id|stringformat:"s" == selected_category_id %}
                         <option value="{{ category.category_id }}" selected>
@@ -33,8 +29,12 @@
 
             <input type="submit" value="検索">
         </form>
+    </div>
+</div>
 
-        <table border="1">
+<div class="card">
+    <div class="card__body">
+        <table>
             <tr>
                 <th>商品ID</th>
                 <th>商品名</th>
@@ -46,7 +46,6 @@
                 <th>オススメ</th>
                 <th>操作</th>
             </tr>
-
             {% for item in items %}
                 <tr>
                     <td>{{ item.item_id }}</td>
@@ -76,12 +75,10 @@
             {% endfor %}
         </table>
 
-        <p>
+        <p class="page-links">
             <a href="{% url 'shop0c:item_register' %}">商品登録</a>
-        </p>
-
-        <p>
             <a href="{% url 'shop0c:admin_main' %}">管理者メインページへ</a>
         </p>
-    </body>
-</html>
+    </div>
+</div>
+{% endblock %}
