@@ -36,6 +36,26 @@ class UpdateUserForm(forms.Form):
         password_confirm = cleaned_data.get('password_confirm')
         if password != password_confirm:
             raise forms.ValidationError('パスワードと確認用パスワードが一致しません')
+    
+class PurchaseForm(forms.Form):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.label_suffix = ""
+
+    destination = forms.CharField(
+        label="配送先",
+        max_length=256
+    )
+
+    payment_method = forms.ChoiceField(
+        label="支払方法",
+        choices=(
+            ("代引き", "代引き"),
+        )
+    )
+
+
+
 
 
 class AdminLoginForm(forms.Form):
@@ -76,26 +96,38 @@ class ItemUpdateForm(forms.Form):
     stock = forms.IntegerField(label="在庫数", min_value=0)
     recommended = forms.BooleanField(label="オススメ", required=False)
 
-'''
-class Search(forms.Form):
-    keyword = forms.CharField(label='キーワード：', max_length=128, widget=forms.TextInput(attrs={'class':'form-control'}))
-'''
 
-class PurchaseForm(forms.Form):
+class AdminPurchaseHistorySearchForm(forms.Form):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.label_suffix = ""
 
-    destination = forms.CharField(
-        label="配送先",
-        max_length=256
+    purchase_id = forms.IntegerField(
+        label="注文ID",
+        required=False,
+        min_value=1
     )
 
-    payment_method = forms.ChoiceField(
-        label="支払方法",
-        choices=(
-            ("代引き", "代引き"),
-        )
+    user_id = forms.CharField(
+        label="会員ID",
+        required=False,
+        max_length=128
+    )
+
+    item_name = forms.CharField(
+        label="商品名",
+        required=False,
+        max_length=128
+    )
+
+    cancel = forms.ChoiceField(
+        label="キャンセル状態",
+        required=False,
+        choices=[
+            ("all", "すべて"),
+            ("not_cancel", "未キャンセル"),
+            ("cancel", "キャンセル済み"),
+        ]
     )
 
 

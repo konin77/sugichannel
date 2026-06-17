@@ -23,7 +23,8 @@ urlpatterns = [
     path('updatecart',views.Updatecart.as_view(),name='updatecart'),
     path('purchase/',views.Purchase_cart.as_view(),name='purchase'),
     path('purchaseCommit/', views.PurchaseCommit.as_view(), name='purchase_commit'),
-    path('updatedestination',views.Updatedestination.as_view(),name='updatedestination'),
+    path('purchaseHistory/', views.PurchaseHistory.as_view(), name="purchase_history"),
+    # path('updatedestination',views.Updatedestination.as_view(),name='updatedestination'),
 
     # --- 管理機能　--- #
     path("adminLogin/", views.AdminLogin.as_view(), name="admin_login"),
