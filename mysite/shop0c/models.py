@@ -85,6 +85,13 @@ class Item(models.Model):
             verbose_name='カテゴリID',
             on_delete=models.CASCADE
     )
+    # ★ 追加：商品画像（任意）
+    image = models.ImageField(
+            verbose_name='商品画像',
+            upload_to='item_images/',
+            blank=True,
+            null=True
+    )
 
 
 class Shopcart(models.Model):

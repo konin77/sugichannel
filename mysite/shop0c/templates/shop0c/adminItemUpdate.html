@@ -11,13 +11,25 @@
             <p>{{ error }}</p>
         {% endif %}
 
-        <form action="{% url 'shop0c:item_update' item.item_id %}" method="POST">
+        {# ★ enctype="multipart/form-data" を追加 #}
+        <form action="{% url 'shop0c:item_update' item.item_id %}" method="POST" enctype="multipart/form-data">
             {% csrf_token %}
             <table>
                 {% for field in form %}
                     <tr>
                         <th>{{ field.label }}</th>
-                        <td>{{ field }}</td>
+                        <td>
+                            {{ field }}
+                            {# ★ 画像フィールドのとき：現在登録済みの画像をプレビュー表示 #}
+                            {% if field.html_name == 'image' and item.image %}
+                                <div style="margin-top:8px;">
+                                    <p style="font-size:13px; color:#555;">現在の画像：</p>
+                                    <img src="{{ item.image.url }}" alt="{{ item.name }}"
+                                         style="max-width:200px; max-height:150px; border:1px solid #ddd; border-radius:6px;">
+                                    <p style="font-size:12px; color:#888;">※新しいファイルを選択すると上書きされます。未選択の場合は現在の画像を維持します。</p>
+                                </div>
+                            {% endif %}
+                        </td>
                         <td>{{ field.errors }}</td>
                     </tr>
                 {% endfor %}
