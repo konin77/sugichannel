@@ -742,4 +742,3 @@ class ItemDelete(View):
         item.delete()
 
         return redirect("shop0c:item_list")
-
