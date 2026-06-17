@@ -3,7 +3,7 @@
     <head>
         <meta charset="UTF-8">
         <title>商品変更</title>
-        <link rel="stylesheet" type="text/css" href="{% static 'style.css' %}">
+        <link rel="stylesheet" type="text/css" href="{% static 'table.css' %}">
     </head>
 
     <body>
@@ -13,7 +13,7 @@
             <p>{{ error }}</p>
         {% endif %}
 
-        <form action="{% url 'item_update' item.item_id %}" method="POST">
+        <form action="{% url 'shop0c:item_update' item.item_id %}" method="POST">
             {% csrf_token %}
 
             <table>
@@ -32,11 +32,11 @@
         </form>
 
         <p>
-            <a href="{% url 'item_list' %}">商品一覧へ</a>
+            <a href="{% url 'shop0c:item_list' %}">商品一覧へ</a>
         </p>
 
         <p>
-            <a href="{% url 'admin_main' %}">管理者メインページへ</a>
+            <a href="{% url 'shop0c:admin_main' %}">管理者メインページへ</a>
         </p>
     </body>
 </html>

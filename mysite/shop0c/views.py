@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.views.generic import View
 from shop0c.models import User, Item, Shopcart, Purchase, Detail, Admin, Category
-from shop0c.forms import LoginForm, RegistUserForm ,UpdateUserForm, AdminLoginForm, ItemRegisterForm, ItemUpdateForm
+from shop0c.forms import LoginForm, RegistUserForm ,UpdateUserForm, AdminLoginForm, ItemRegisterForm, ItemUpdateForm, PurchaseForm
 #from django.contrib.auth import logout
 
 from .forms import LoginForm #, ItemRegisterForm, ItemUpdateForm #, AdminPurchaseHistorySearchForm
@@ -11,6 +11,7 @@ from .forms import LoginForm #, ItemRegisterForm, ItemUpdateForm #, AdminPurchas
 
 def index(request):
     return render(request,'shop0c/index.html')
+
 
 class Top(View):
     def get(self,request):
@@ -30,6 +31,7 @@ class Top(View):
         }
         return render(request,'shop0c/main.html',context)
 
+
 class Search(View):
     def get(self, request):
         pass
@@ -44,7 +46,7 @@ class Search(View):
             '4':'キッチン用品',
             '5':'スポーツ用品',
             '6':'鞄',
-            '7':'帽子'
+            '7':'帽子',
         }
 
         category_name = category_map[category]
@@ -68,7 +70,8 @@ class Search(View):
         }
 
         return render(request,'shop0c/searchResult.html',context)
-    
+
+
 class Detailuesr(View):
     def get(self, request, pk):
         item = Item.objects.get(item_id=pk)
@@ -83,6 +86,7 @@ class Detailuesr(View):
     def post(self, request):
         pass
 
+
 class Cart(View):
     def get(self, request):
 
@@ -95,8 +99,6 @@ class Cart(View):
         for cart in carts:
             sum += cart.amount*cart.item.price
 
-
-
         #carts = Shopcart.objects.get(user=user_id)
         context = {
             'carts':carts,
@@ -105,7 +107,6 @@ class Cart(View):
         }
 
         return render(request,'shop0c/cart.html',context)
-
 
     def post(self, request):
         amount = request.POST['amount']
@@ -144,6 +145,7 @@ class Cart(View):
 
         return render(request,'shop0c/cart.html',context)
 
+
 class Deletecart(View):
     def get(self, request):
         pass
@@ -153,7 +155,8 @@ class Deletecart(View):
         cart.delete()
 
         return redirect(reverse('shop0c:cart'))
-    
+
+
 class Modifycart(View):
     def get(self, request):
         pass
@@ -175,7 +178,8 @@ class Modifycart(View):
         }
 
         return render(request,'shop0c/modifycart.html',context)
-        
+
+
 class Updatecart(View): 
     def get(self, request):
         pass
@@ -225,6 +229,7 @@ class Login(View):
         }
         return render(request, 'shop0c/login.html', context)
 
+
 class Logout(View):
     def get(self, request):
         request.session['is_login'] = False
@@ -233,6 +238,7 @@ class Logout(View):
         request.session['name'] = ''
         request.session['address'] = ''
         return redirect(reverse('shop0c:login'))
+
 
 class Register(View):
     def get(self, request):
@@ -261,6 +267,7 @@ class Register(View):
             }
             return render(request, 'shop0c/registerUserConfirm.html',context)
 
+
 class Confirmregister(View):
     def get(self, request):
         form = RegistUserForm()
@@ -284,7 +291,8 @@ class Confirmregister(View):
             'name':name
         }
         return render(request, 'shop0c/registerUserCommit.html',context)
-    
+
+
 class UserInfo(View):
     def get(self,request):
         user_id = request.session.get('user_id')
@@ -303,6 +311,7 @@ class UserInfo(View):
 
     def post(self,request):
         pass
+
 
 class UpdateUser(View):
     def get(self, request):
@@ -325,6 +334,7 @@ class UpdateUser(View):
 
     def post(self, request):
         pass
+
 
 class UpdateConfirm(View):
     def get(self, request):
@@ -355,6 +365,7 @@ class UpdateConfirm(View):
         }
 
         return render(request,'shop0c/updateUserConfirm.html',context)
+
 
 class UpdateUserConfirm(View):
     def get(self, request):
@@ -389,7 +400,6 @@ class UpdateUserConfirm(View):
         return render(request,'shop0c/updateUserCommit.html',context)
 
 
-
 class Delete(View):
     def get(self, request):
         name = request.session.get('name')
@@ -412,46 +422,151 @@ class Delete(View):
 
 class Purchase_cart(View):
     def get(self, request):
-        pass
-    def post(self, request):
-        sum = request.POST['sum']
-        new_purchase = Purchase()
         user = User.objects.get(user_id=request.session.get('user_id'))
-        max_id_o = Purchase.objects.order_by('-Purchase_id').first()
-        max_id = int(max_id_o.Purchase_id)+1
-        new_purchase.Purchase_id = max_id
-        new_purchase.destination = user.address
-        new_purchase.user = user
-        new_purchase.save()
+        carts = Shopcart.objects.filter(user=user)
+
+        if not carts.exists():
+            return redirect("shop0c:cart")
+
+        details = []
+        total = 0
+
+        for cart in carts:
+            total += cart.item.price * cart.amount
+            details.append(cart)
+
+        form = PurchaseForm(initial={
+            "destination": user.address,
+            "payment_mothod": "代引き"
+        })
+
+        context = {
+            "details": details,
+            "sum": total,
+            "form": form,
+        }
+        return render(request, 'shop0c/purchase.html', context)
+
+    def post(self, request):
+        print("① POST来た")
+
+        sum = request.POST.get('sum')
+        user = User.objects.get(user_id=request.session.get('user_id'))
 
         carts = Shopcart.objects.filter(user=user)
-        details = []
-        print(carts)
+        print("② carts取得")
+
+        if not carts.exists():
+            print("③ cart空")
+            return redirect("shop0c:cart")
+
+        max_id_o = Purchase.objects.order_by('-Purchase_id').first()
+        if max_id_o:
+            max_purchase_id = int(max_id_o.Purchase_id) + 1
+        else:
+            max_purchase_id = 1
+
+        new_purchase = Purchase(
+            Purchase_id=max_purchase_id,
+            destination=user.address,
+            user=user
+        )
+        new_purchase.save()
+        print("④ purchase保存")
+
+        max_detail_o = Detail.objects.order_by('-purchase_detail_id').first()
+        if max_detail_o:
+            next_detail_id = int(max_detail_o.purchase_detail_id) + 1
+        else:
+            next_detail_id = 1
+
         for cart in carts:
+            print("⑤ ループ入った")
 
-            new_detail = Detail()
-            max_id_o = Detail.objects.order_by('-purchase_detail_id').first()
-            max_id = int(max_id_o.purchase_detail_id)+10
-            new_detail.purchase_detail_id = max_id
-            new_detail.amount = cart.amount
-            new_detail.Purchase = new_purchase
-            new_detail.item = cart.item
-            cart.delete()
+            new_detail = Detail(
+                purchase_detail_id=next_detail_id,
+                amount=cart.amount,
+                Purchase=new_purchase,
+                item=cart.item
+            )
             new_detail.save()
-            details.append(new_detail)
-        
+            print("⑥ detail保存")
 
-        print(details)
+            cart.delete()
+            print("⑦ cart削除")
+
+            next_detail_id += 1
+
+        print("⑧ 最後まで来た")
+
         context = {
-            'new_purchase':new_purchase,
-            'details':details,
-            'sum':sum,
-            #'item':item,
+            "purchase": new_purchase,
         }
 
-        details = []
-        return render(request,'shop0c/purchase.html',context)
-    
+        return redirect('shop0c:purchase_commit')
+
+
+class PurchaseCommit(View):
+    def get(self, request):
+        purchase = Purchase.objects.order_by('-Purchase_id').first()
+
+        context = {
+            "purchase": purchase,
+        }
+        return render(request, 'shop0c/purchaseCommit.html', context)
+
+# class Purchase_cart(View):
+#     def get(self, request):
+#         pass
+
+#     def post(self, request):
+#         sum = request.POST['sum']
+#         new_purchase = Purchase()
+#         user = User.objects.get(user_id=request.session.get('user_id'))
+#         max_id_o = Purchase.objects.order_by('-Purchase_id').first()
+#         max_id = int(max_id_o.Purchase_id)+1
+#         new_purchase.Purchase_id = max_id
+#         new_purchase.destination = user.address
+#         new_purchase.user = user
+#         new_purchase.save()
+
+#         carts = Shopcart.objects.filter(user=user)
+
+#         if not carts.exists():
+#             return redirect("shop0c:cart")
+        
+#         details = []
+
+#         for cart in carts:
+
+#             new_detail = Detail()
+#             max_id_o = Detail.objects.order_by('-purchase_detail_id').first()
+#             max_id = int(max_id_o.purchase_detail_id)+10
+#             new_detail.purchase_detail_id = max_id
+#             new_detail.amount = cart.amount
+#             new_detail.Purchase = new_purchase
+#             new_detail.item = cart.item
+#             cart.delete()
+#             new_detail.save()
+#             details.append(new_detail)
+        
+#         form = PurchaseForm(initial={
+#             "destination": user.address,
+#             "payment_mothod": "代引き"
+#         })
+
+#         context = {
+#             "form": form,
+#             'new_purchase':new_purchase,
+#             'details':details,
+#             'sum':sum,
+#             #'item':item,
+#         }
+
+#         details = []
+#         return render(request,'shop0c/purchase.html',context)
+
+
 class Updatedestination(View):
     def get(self, request):
         pass
@@ -468,28 +583,27 @@ class Updatedestination(View):
         return render(request,'shop0c/updatedestination.html',context)
 
 
-
 ###########################
 # --- ここから管理機能 --- #
 ###########################
 
 class AdminLogin(View):
     def get(self, request, *args, **kwargs):
-        form = LoginForm()
+        form = AdminLoginForm()
 
         context = {
             "form": form,
         }
-        return render(request, "adminLogin.html", context)
+        return render(request, "shop0c/adminLogin.html", context)
 
     def post(self, request, *args, **kwargs):
-        form = LoginForm(request.POST)
+        form = AdminLoginForm(request.POST)
 
         if not form.is_valid():
             context = {
                 "form": form,
             }
-            return render(request, "adminLogin.html", context)
+            return render(request, "shop0c/adminLogin.html", context)
 
         admin_id = form.cleaned_data["admin_id"]
         password = form.cleaned_data["password"]
@@ -501,22 +615,22 @@ class AdminLogin(View):
                 "form": form,
                 "error": "管理者ID、またはパスワードが間違っています。",
             }
-            return render(request, "adminLogin.html", context)
+            return render(request, "shop0c/adminLogin.html", context)
 
         request.session["admin_id"] = admin.admin_id
 
-        return redirect("admin_main")
+        return redirect("shop0c:admin_main")
 
 
 class AdminMain(View):
     def get(self, request, *args, **kwargs):
         if "admin_id" not in request.session:
-            return redirect("admin_login")
+            return redirect("shop0c:admin_login")
 
         context = {
             "admin_id": request.session["admin_id"],
         }
-        return render(request, "adminMain.html", context)
+        return render(request, "shop0c/adminMain.html", context)
     
 
 class AdminLogout(View):
@@ -524,13 +638,13 @@ class AdminLogout(View):
         if "admin_id" in request.session:
             del request.session["admin_id"]
 
-        return redirect("admin_login")
+        return redirect("shop0c:admin_login")
 
 
 class ItemList(View):
     def get(self, request, *args, **kwargs):
         if "admin_id" not in request.session:
-            return redirect("admin_login")
+            return redirect("shop0c:admin_login")
 
         keyword = request.GET.get("keyword", "")
         category_id = request.GET.get("category_id", "all")
@@ -552,24 +666,24 @@ class ItemList(View):
             "keyword": keyword,
             "selected_category_id": category_id,
         }
-        return render(request, "adminItemList.html", context)
+        return render(request, "shop0c/adminItemList.html", context)
 
 
 class ItemRegister(View):
     def get(self, request, *args, **kwargs):
         if "admin_id" not in request.session:
-            return redirect("admin_login")
+            return redirect("shop0c:admin_login")
 
         form = ItemRegisterForm()
 
         context = {
             "form": form,
         }
-        return render(request, "adminItemRegister.html", context)
+        return render(request, "shop0c/adminItemRegister.html", context)
 
     def post(self, request, *args, **kwargs):
         if "admin_id" not in request.session:
-            return redirect("admin_login")
+            return redirect("shop0c:admin_login")
 
         form = ItemRegisterForm(request.POST)
 
@@ -577,7 +691,7 @@ class ItemRegister(View):
             context = {
                 "form": form,
             }
-            return render(request, "adminItemRegister.html", context)
+            return render(request, "shop0c/adminItemRegister.html", context)
 
         item_id = form.cleaned_data["item_id"]
         name = form.cleaned_data["name"]
@@ -593,7 +707,7 @@ class ItemRegister(View):
                 "form": form,
                 "error": "この商品IDはすでに使われています。",
             }
-            return render(request, "adminItemRegister.html", context)
+            return render(request, "shop0c/adminItemRegister.html", context)
 
         item = Item(
             item_id=item_id,
@@ -608,19 +722,19 @@ class ItemRegister(View):
 
         item.save()
 
-        return redirect("item_list")
+        return redirect("shop0c:item_list")
 
 
 class ItemUpdate(View):
     # UserUpdateを使いまわせそう
     def get(self, request, item_id, *args, **kwargs):
         if "admin_id" not in request.session:
-            return redirect("admin_login")
+            return redirect("shop0c:admin_login")
 
         item = Item.objects.filter(item_id=item_id).first()
 
         if item is None:
-            return redirect("item_list")
+            return redirect("shop0c:item_list")
 
         form = ItemUpdateForm(initial={
             "item_id": item.item_id,
@@ -637,16 +751,16 @@ class ItemUpdate(View):
             "form": form,
             "item": item,
         }
-        return render(request, "adminItemUpdate.html", context)
+        return render(request, "shop0c/adminItemUpdate.html", context)
 
     def post(self, request, item_id, *args, **kwargs):
         if "admin_id" not in request.session:
-            return redirect("admin_login")
+            return redirect("shop0c:admin_login")
 
         old_item = Item.objects.filter(item_id=item_id).first()
 
         if old_item is None:
-            return redirect("item_list")
+            return redirect("shop0c:item_list")
 
         form = ItemUpdateForm(request.POST)
 
@@ -656,7 +770,7 @@ class ItemUpdate(View):
                 "item": old_item,
             }
 
-            return render(request, "adminItemUpdate.html", context)
+            return render(request, "shop0c/adminItemUpdate.html", context)
 
         new_item_id = form.cleaned_data["item_id"]
 
@@ -668,7 +782,7 @@ class ItemUpdate(View):
                     "item": old_item,
                     "error": "この商品IDはすでに使われています。",
                 }
-                return render(request, "adminItemUpdate.html", context)
+                return render(request, "shop0c/adminItemUpdate.html", context)
 
             new_item = Item(
                 item_id=new_item_id,
@@ -701,33 +815,33 @@ class ItemUpdate(View):
 
             old_item.save()
 
-        return redirect("item_list")
+        return redirect("shop0c:item_list")
 
 
 class ItemDelete(View):
     def get(self, request, item_id, *args, **kwargs):
         if "admin_id" not in request.session:
-            return redirect("admin_login")
+            return redirect("shop0c:admin_login")
 
         item = Item.objects.filter(item_id=item_id).first()
 
         if item is None:
-            return redirect("item_list")
+            return redirect("shop0c:item_list")
 
         context = {
             "item": item,
         }
 
-        return render(request, "adminItemDelete.html", context)
+        return render(request, "shop0c/adminItemDelete.html", context)
 
     def post(self, request, item_id, *args, **kwargs):
         if "admin_id" not in request.session:
-            return redirect("admin_login")
+            return redirect("shop0c:admin_login")
 
         item = Item.objects.filter(item_id=item_id).first()
 
         if item is None:
-            return redirect("item_list")
+            return redirect("shop0c:item_list")
 
         # 購入履歴が存在する商品は削除できないようにしておく（いらんかも）
         # if PurchaseModel.objects.filter(item=item).exists():
@@ -741,5 +855,4 @@ class ItemDelete(View):
         Shopcart.objects.filter(item=item).delete()
         item.delete()
 
-        return redirect("item_list")
-
+        return redirect("shop0c:item_list")

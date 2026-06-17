@@ -38,7 +38,7 @@
     {% else %}
     <a href="{% url 'shop0c:login' %}">ログイン</a><br>
     {% endif %}
-    <a href="to admin">管理者ページ（任意機能）</a><br>
+    <a href="{% url 'shop0c:admin_login' %}">管理者ページ</a><br>
 </body>
 </html>
 {% endblock %}
