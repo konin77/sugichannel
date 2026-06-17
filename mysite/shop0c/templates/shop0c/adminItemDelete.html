@@ -44,14 +44,14 @@
             </tr>
         </table>
 
-        <form action="{% url 'item_delete' item.item_id %}" method="POST">
+        <form action="{% url 'shop0c:item_delete' item.item_id %}" method="POST">
             {% csrf_token %}
             <p>
                 <input type="submit" value="削除">
             </p>
         </form> 
         <p>
-            <a href="{% url 'item_list' %}">商品一覧へ</a>
+            <a href="{% url 'shop0c:item_list' %}">商品一覧へ</a>
         </p>
         
 
