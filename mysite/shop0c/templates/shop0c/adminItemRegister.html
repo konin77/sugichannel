@@ -11,14 +11,15 @@
             <p>{{ error }}</p>
         {% endif %}
 
-        <form action="{% url 'shop0c:item_register' %}" method="POST">
+        {# ★ enctype="multipart/form-data" を追加 #}
+        <form action="{% url 'shop0c:item_register' %}" method="POST" enctype="multipart/form-data">
             {% csrf_token %}
             <table>
                 {% for field in form %}
                 <tr>
                     <th>{{ field.label }}</th>
                     <td>{{ field }}</td>
-                    <td>{{ field.error }}</td>
+                    <td>{{ field.errors }}</td>
                 </tr>
                 {% endfor %}
             </table>
