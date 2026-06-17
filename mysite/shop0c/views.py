@@ -19,7 +19,7 @@ class Top(View):
         context = {
             'login_flag':login_flag,
             'name':name,
-            #'form':form
+            'recommended_items': Item.objects.filter(recommended=True),  
         }
         return render(request,'shop0c/main.html',context)
     def post(self,request):

@@ -1,45 +1,66 @@
-<!DOCTYPE html>
-{% load static %}
-<html lang="ja">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ショッピングカート</title>
-    <link rel="stylesheet" type="text/css" href="{% static 'table.css' %}"/>
-</head>
-<body>
-    <table>
-        <tr>
-            <th>商品名</th>
-            <th>商品の色</th>
-            <th>メーカー名</th>
-            <th>単価</th>
-            <th>数量</th>
-            <th>修正</th>
-            <th>削除</th>
-        </tr>
-        {% for cart in carts %}
-        <tr>
-            <td>{{cart.item.name}}</td>
-            <td>{{cart.item.color}}</td>
-            <td>{{cart.item.manufacturer}}</td>
-            <td>{{cart.item.price}}</td>
-            <td>{{cart.amount}}</td>
-            <form action="{% url 'shop0c:modifycart' %}" method="POST">
-                <td><input type="submit" class="btn-square" value="修正"></td>
-                <input type="hidden" name="modify" value="{{cart.id}}">
-            </form>
-            <form action="{% url 'shop0c:deletecart' %}" method="POST">
-                <td><input type="submit" class="btn-square" value="削除"></td>
-                <input type="hidden" name="delete" value="{{cart.id}}">
-            </form>
-        </tr>
-        {% endfor %}
-    </table>
-    合計{{sum}}円
-    <form action="{% url 'shop0c:purchase' %}" method="GET">
-        <button type="submit" class="btn-square">購入する</button>
-    </form>
-    <a href="{% url 'shop0c:main' %}">商品検索へ</a>
-</body>
-</html>
+{% extends 'shop0c/base.html' %}
+
+{% block title %}ショッピングカート{% endblock %}
+
+{% block content %}
+<h1>ショッピングカート</h1>
+
+<div class="card">
+    <div class="card__body">
+        {% if carts %}
+        <table class="cart-table">
+            <tr>
+                <th>商品名</th>
+                <th>商品の色</th>
+                <th>メーカー名</th>
+                <th class="num">単価</th>
+                <th class="num">数量</th>
+                <th style="text-align:center;">修正</th>
+                <th style="text-align:center;">削除</th>
+            </tr>
+            {% for cart in carts %}
+            <tr>
+                <td class="name">{{cart.item.name}}</td>
+                <td>{{cart.item.color}}</td>
+                <td>{{cart.item.manufacturer}}</td>
+                <td class="num">{{cart.item.price}} 円</td>
+                <td class="num">{{cart.amount}}</td>
+                <td>
+                    <div class="cart-actions">
+                        <form action="{% url 'shop0c:modifycart' %}" method="POST">
+                            <input type="hidden" name="modify" value="{{cart.id}}">
+                            <input type="submit" class="btn-square btn-sm" value="修正">
+                        </form>
+                    </div>
+                </td>
+                <td>
+                    <div class="cart-actions">
+                        <form action="{% url 'shop0c:deletecart' %}" method="POST">
+                            <input type="hidden" name="delete" value="{{cart.id}}">
+                            <input type="submit" class="btn-square btn-sm btn-ghost" value="削除">
+                        </form>
+                    </div>
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+
+        <div class="cart-summary">
+            <a class="link-btn" href="{% url 'shop0c:main' %}">← 商品検索へ</a>
+            <div style="display:flex; align-items:center; gap:18px;">
+                <span class="cart-total">合計<span class="num">{{sum}}</span>円</span>
+                <form action="{% url 'shop0c:purchase' %}" method="GET">
+                    <button type="submit" class="btn-square btn-cart">購入する</button>
+                </form>
+            </div>
+        </div>
+
+        {% else %}
+        <p class="cart-empty">カートに商品がありません。</p>
+        <div style="text-align:center;">
+            <a class="link-btn" href="{% url 'shop0c:main' %}">← 商品検索へ</a>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
