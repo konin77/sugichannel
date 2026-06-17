@@ -1,0 +1,50 @@
+{% extends 'shop0c/base.html' %}
+
+{% block title %}購入履歴{% endblock %}
+
+{% block content %}
+<h1>購入履歴</h1>
+
+{% for purchase_history in purchase_history_list %}
+<div class="card" style="margin-bottom:20px;">
+    <div class="card__body">
+        <h2 style="margin-top:0;">注文ID：{{ purchase_history.purchase.Purchase_id }}</h2>
+        <p>注文日：{{ purchase_history.purchase.booked_date }}</p>
+        <p>配送先：{{ purchase_history.purchase.destination }}</p>
+
+        <table>
+            <tr>
+                <th>商品名</th>
+                <th>色</th>
+                <th>メーカー</th>
+                <th>単価</th>
+                <th>数量</th>
+                <th>合計金額</th>
+            </tr>
+            {% for detail in purchase_history.detail_list %}
+            <tr>
+                <td>{{ detail.item.name }}</td>
+                <td>{{ detail.item.color }}</td>
+                <td>{{ detail.item.manufacturer }}</td>
+                <td>{{ detail.item.price }}円</td>
+                <td>{{ detail.amount }}</td>
+                <td>{{ detail.total_price }}円</td>
+            </tr>
+            {% endfor %}
+        </table>
+
+        <p class="cart-total">注文合計金額：<span class="num">{{ purchase_history.total_price_all }}</span>円</p>
+    </div>
+</div>
+{% empty %}
+<div class="card narrow">
+    <div class="card__body">
+        <p class="cart-empty">購入履歴はありません。</p>
+    </div>
+</div>
+{% endfor %}
+
+<div class="page-links">
+    <a href="{% url 'shop0c:main' %}">商品検索へ戻る</a>
+</div>
+{% endblock %}

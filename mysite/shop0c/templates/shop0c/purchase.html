@@ -1,43 +1,40 @@
-<!DOCTYPE html>
-{% load static %}
-<html lang="ja">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>購入確認画面</title>
-        <link rel="stylesheet" type="text/css" href="{% static 'table.css' %}"/>
-    </head>
-    <body>
-        <h1>購入確認</h1>
+{% extends 'shop0c/base.html' %}
 
-        <h3>購入商品</h3>
+{% block title %}購入確認{% endblock %}
+
+{% block content %}
+<h1>購入確認</h1>
+
+<div class="card">
+    <div class="card__body">
+        <h2 style="margin-top:0;">購入商品</h2>
         <table>
-        <tr>
-            <th>商品名</th>
-            <th>色</th>
-            <th>メーカー</th>
-            <th>単価</th>
-            <th>数量</th>
-        </tr>
-        {% for detail in details %}
-        <tr>
-            <td>{{ detail.item.name }}</td>
-            <td>{{ detail.item.color }}</td>
-            <td>{{ detail.item.manufacturer }}</td>
-            <td>{{ detail.item.price }}</td>
-            <td>{{ detail.amount }}</td>
-        </tr>
-        {% endfor %}
-
+            <tr>
+                <th>商品名</th>
+                <th>色</th>
+                <th>メーカー</th>
+                <th>単価</th>
+                <th>数量</th>
+            </tr>
+            {% for detail in details %}
+            <tr>
+                <td>{{ detail.item.name }}</td>
+                <td>{{ detail.item.color }}</td>
+                <td>{{ detail.item.manufacturer }}</td>
+                <td>{{ detail.item.price }}</td>
+                <td>{{ detail.amount }}</td>
+            </tr>
+            {% endfor %}
         </table>
-        合計金額：{{sum}}円
-        <br>
+        <p class="cart-total">合計金額：<span class="num">{{sum}}</span>円</p>
+    </div>
+</div>
 
-        <h3>配送先・支払い方法</h3>
-
+<div class="card" style="margin-top:20px;">
+    <div class="card__body">
+        <h2 style="margin-top:0;">配送先・支払い方法</h2>
         <form action="{% url 'shop0c:purchase' %}" method="POST">
             {% csrf_token %}
-
             <table>
                 {% for field in form %}
                     <tr>
@@ -47,18 +44,15 @@
                     </tr>
                 {% endfor %}
             </table>
-
-            <p>
+            <div class="form-actions">
                 <input type="submit" value="購入を確定する">
-            </p>
+            </div>
         </form>
+    </div>
+</div>
 
-        <p>
-            <a href="{% url 'shop0c:cart' %}">ショッピングカートへ戻る</a>
-        </p>
-
-        <p>
-        <a href="{% url 'shop0c:main' %}">商品検索へ</a>
-        </p>
-    </body>
-</html>
+<div class="page-links">
+    <a href="{% url 'shop0c:cart' %}">ショッピングカートへ戻る</a>
+    <a href="{% url 'shop0c:main' %}">商品検索へ</a>
+</div>
+{% endblock %}

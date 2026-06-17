@@ -1,14 +1,12 @@
-{% load static %}
-<html>
-    <head>
-        <meta charset="UTF-8">
-        <title>管理者ログイン</title>
-        <link rel="stylesheet" type="text/css" href="{% static 'table.css' %}">
-    </head>
+{% extends 'shop0c/adminbase.html' %}
 
-    <body>
-        <h2>管理者ログイン</h2>
+{% block title %}管理者ログイン{% endblock %}
 
+{% block content %}
+<h1>管理者ログイン</h1>
+
+<div class="card narrow">
+    <div class="card__body">
         {% if error %}
             <p>{{ error }}</p>
         {% endif %}
@@ -22,17 +20,17 @@
                         <td>{{ field }}</td>
                     </tr>
                 {% endfor %}
-
                 <tr>
                     <td colspan="2">
-                        <input type="submit" value="ログイン">
+                        <div class="form-actions">
+                            <input type="submit" value="ログイン">
+                        </div>
                     </td>
                 </tr>
             </table>
         </form>
 
-        <p>
-            <a href="{% url 'shop0c:main' %}">商品検索へ</a>
-        </p>
-    </body>
-</html>
+        <p class="page-links"><a href="{% url 'shop0c:main' %}">商品検索へ</a></p>
+    </div>
+</div>
+{% endblock %}

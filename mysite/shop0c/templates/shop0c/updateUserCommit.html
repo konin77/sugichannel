@@ -1,53 +1,32 @@
-<!DOCTYPE html>
-{% load static %}
-<html lang="ja">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>会員情報の更新完了</title>
-    <link rel="stylesheet" type="text/css" href="{% static 'table.css' %}"/>
-</head>
-<body>
-    <p>以下の情報で更新しました。</p>
-    <br>
-    
-        {% csrf_token %}
-        <table>
-                <tr>
-                    <th>会員ID：</th>
-                    <td>
-                        {{user_id}}
-                    </td>
-                    
-                </tr>
-                <tr>
-                    <th>パスワード：</th>
-                    <td>
-                        表示しない
-                    </td>
-                    
-                </tr>
-                <tr>
-                    <th>お名前：</th>
-                    <td>
-                        {{name}}
-                    </td>
-                    
-                </tr>
-                <tr>
-                    <th>ご住所：</th>
-                    <td>
-                        {{address}}
-                    </td>
-                    
-                <tr>
-                    <td>
-                        <a href="{% url 'shop0c:main' %}">商品検索へ</a>
-                    </td>
-                </tr>
+{% extends 'shop0c/base.html' %}
 
-                </tr>
-                
-        
-</body>
-</html>
+{% block title %}会員情報の更新完了{% endblock %}
+
+{% block content %}
+<h1>以下の情報で更新しました。</h1>
+
+<div class="card narrow">
+    <div class="card__body">
+        <table>
+            <tr>
+                <th>会員ID：</th>
+                <td>{{user_id}}</td>
+            </tr>
+            <tr>
+                <th>パスワード：</th>
+                <td>表示しない</td>
+            </tr>
+            <tr>
+                <th>お名前：</th>
+                <td>{{name}}</td>
+            </tr>
+            <tr>
+                <th>ご住所：</th>
+                <td>{{address}}</td>
+            </tr>
+        </table>
+
+        <p class="page-links"><a href="{% url 'shop0c:main' %}">商品検索へ</a></p>
+    </div>
+</div>
+{% endblock %}

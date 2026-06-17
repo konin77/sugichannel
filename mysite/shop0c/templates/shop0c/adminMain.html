@@ -1,34 +1,24 @@
-{% load static %}
-<html>
-    <head>
-        <meta charset="UTF-8">
-        <title>管理者メインページ</title>
-        <link rel="stylesheet" type="text/css" href="{% static 'table.css' %}">
-    </head>
+{% extends 'shop0c/adminbase.html' %}
 
-    <body>
-        <h2>管理者メインページ</h2>
+{% block title %}管理者メインページ{% endblock %}
 
+{% block content %}
+<h1>管理者メインページ</h1>
+
+<div class="card narrow">
+    <div class="card__body">
         <p>管理者ID：{{ admin_id }}</p>
 
-        <p>
+        <p class="page-links">
             <a href="{% url 'shop0c:item_list' %}">商品一覧</a>
-        </p>
-
-        <p>
             <a href="{% url 'shop0c:item_register' %}">商品登録</a>
-        </p>
-
-        <p>
             <a href="#">購入履歴検索</a>
         </p>
 
-        <p>
+        <p class="page-links">
             <a href="{% url 'shop0c:admin_logout' %}">ログアウト</a>
-        </p>
-
-        <p>
             <a href="{% url 'shop0c:main' %}">商品検索画面へ</a>
         </p>
-    </body>
-</html>
+    </div>
+</div>
+{% endblock %}
