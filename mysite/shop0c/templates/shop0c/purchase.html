@@ -25,7 +25,7 @@
     <form action="{% url 'shop0c:updatedestination' %}" method="POST">
     配送先：<input type="text" name="destination" value="{{new_purchase.user.address}}"><br>
             <input type="hidden" name="purchase_id" value="{{new_purchase.Purchase_id}}">
-    <input type="submit" value="配送先変更">
+    <input type="submit" class="btn-square" value="配送先変更">
     </form>
     <a href="{% url 'shop0c:main' %}">商品検索へ</a>
 </body>

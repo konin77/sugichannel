@@ -1,19 +1,161 @@
+/* ---------- リセット & ベース ---------- */
+body {
+  font-family: "Helvetica Neue", "Hiragino Sans", "Hiragino Kaku Gothic ProN", "Meiryo", sans-serif;
+  background-color: #FFFDF7;
+  color: #333;
+  line-height: 1.8;                /* 1.6 → 1.8 で余裕を持たせる */
+  font-size: 16px;                 /* ベースを16pxに明示 */
+  min-height: 100vh;
+}
+
+/* ---------- 見出し（H1） ---------- */
+h1 {
+  font-size: 22px;                 /* 24px → 22px に少し抑える */
+  color: #E67E22;
+  border-left: 5px solid #F39C12;
+  padding-left: 12px;
+  margin-bottom: 20px;
+}
+
+/* ---------- テーブル ---------- */
+thead th {
+  background-color: #FFA726;
+  color: #fff;
+  padding: 12px 16px;
+  text-align: left;
+  font-size: 16px;                 /* 14px → 16px */
+  font-weight: 600;
+}
+
+tbody td {
+  padding: 12px 16px;
+  border-bottom: 1px solid #FCE4C0;
+  font-size: 16px;                 /* 14px → 16px */
+}
+
+/* ---------- フォーム ---------- */
+label {
+  display: block;
+  font-size: 16px;                 /* 14px → 16px */
+  font-weight: 600;
+  color: #555;
+  margin-bottom: 4px;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="number"],
+input[type="search"],
+input[type="tel"],
+select,
+textarea {
+  width: 100%;
+  padding: 10px 14px;
+  border: 2px solid #F5D6A8;
+  border-radius: 10px;
+  font-size: 16px;                 /* 14px → 16px */
+  background-color: #fff;
+  transition: border-color 0.2s;
+  margin-bottom: 16px;
+  outline: none;
+}
+
+/* ---------- ボタン ---------- */
+button,
+input[type="submit"] {
+  display: inline-block;
+  padding: 10px 28px;
+  background-color: #FF8C00;
+  color: #fff;
+  border: none;
+  border-radius: 25px;
+  font-size: 16px;                 /* 15px → 16px */
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s, transform 0.1s;
+  margin: 4px;
+}
+
+/* ---------- ページ遷移リンク ---------- */
+a.link-btn {
+  display: inline-block;
+  padding: 8px 20px;
+  background-color: #F39C12;
+  color: #fff;
+  border-radius: 25px;
+  font-size: 16px;                 /* 14px → 16px */
+  font-weight: 500;
+  transition: background-color 0.2s;
+}
+
+/* ---------- テーブル ---------- */
 table {
-    border-collapse: collapse;
-  }
-   th {
-    background: #ccc;
-  }
-  
-  th, td {
-    border: 1px solid #ccc;
-    padding: 8px;
-  }
-  
-  tr:nth-child(even) {
-    background: #efefef;
-  }
-  
-  tr:hover {
-    background: #d1d1d1;
-  }
+  width: auto;                      /* 全体に広がらないように */
+  min-width: 60%;                   /* 最低幅（お好みで調整） */
+  max-width: 90%;
+  margin: 0 auto 24px auto;        /* 中央寄せ */
+  border-collapse: separate;
+  border-spacing: 0;
+  border-radius: 10px;
+  overflow: hidden;
+  border: 1px solid #F5D6A8;
+}
+/* ---------- リンク（全aタグ共通） ---------- */
+a {
+  color: #E67E22;
+  font-size: 16px;
+  font-weight: 600;
+  text-decoration: none;
+  position: relative;
+  padding-bottom: 2px;
+  transition: color 0.2s;
+}
+
+a::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 0;
+  height: 2px;
+  background-color: #FF8C00;
+  border-radius: 2px;
+  transition: width 0.3s;
+}
+
+a:hover {
+  color: #D35400;
+}
+
+a:hover::after {
+  width: 100%;
+}
+
+/* ---------- ナビバーのリンクは上書き ---------- */
+.navbar-menu li a {
+  color: #fff;
+  font-size: 14px;
+  font-weight: 500;
+  padding: 6px 12px;
+  border-radius: 20px;
+  position: static;                /* 下線アニメを無効化 */
+  transition: background-color 0.2s;
+}
+
+.navbar-menu li a::after {
+  content: none;                   /* 下線を消す */
+}
+
+.navbar-menu li a:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+  color: #fff;
+}
+
+.navbar-logo {
+  position: static;                /* ロゴにも下線を出さない */
+}
+
+.navbar-logo::after {
+  content: none;
+}
