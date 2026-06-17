@@ -37,9 +37,8 @@
         {% endfor %}
     </table>
     合計{{sum}}円
-    <form action="{% url 'shop0c:purchase' %}" method="POST">
-        <input type="submit" class="btn-square" value="購入する（任意機能）">
-        <input type="hidden" name="sum" value="{{sum}}">
+    <form action="{% url 'shop0c:purchase' %}" method="GET">
+        <button type="submit" class="btn-square">購入する</button>
     </form>
     <a href="{% url 'shop0c:main' %}">商品検索へ</a>
 </body>
