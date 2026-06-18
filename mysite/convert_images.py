@@ -9,7 +9,7 @@ targets = [
 for path in targets:
     img = Image.open(path)
     out = os.path.splitext(path)[0] + ".webp"
-    img.save(out, "webp", quality=80, method=6)
+    img.save(out, "webp", quality=60, method=6)
     before = os.path.getsize(path) / 1024
     after = os.path.getsize(out) / 1024
     print(f"{path}")
