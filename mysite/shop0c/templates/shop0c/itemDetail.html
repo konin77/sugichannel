@@ -32,10 +32,7 @@
                 <p class="product-detail__maker">{{ item.manufacturer }}</p>
                 <h2 class="product-detail__name">{{ item.name }}</h2>
 
-                <div class="price">
-                    <span class="price__num">{{ item.price }}</span>
-                    <span class="price__yen">円</span>
-                </div>
+                {% include "shop0c/price_slot_animation.html" %}
 
                 <dl class="spec">
                     <div class="spec__row">
