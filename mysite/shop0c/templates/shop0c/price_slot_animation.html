@@ -1,131 +1,94 @@
-
 {# --- 価格表示エリア --- #}
 <div class="price-slot-wrap" id="priceSlotWrap" data-price="{{ price }}"></div>
 
-{# --- スタイル (既存CSSに追記してもOK) --- #}
-<style>
-.price-slot-wrap {
-  display: flex;
-  align-items: flex-end;
-  gap: 2px;
-  height: 54px;
-  overflow: hidden;
-}
-
-.price-slot-digit {
-  width: 32px;
-  height: 54px;
-  overflow: hidden;
-}
-
-.price-slot-reel {
-  display: flex;
-  flex-direction: column;
-  will-change: transform;
-}
-
-.price-slot-num {
-  height: 54px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 40px;
-  font-weight: 700;
-  color: #e07b2a; /* 既存サイトの価格色に合わせて調整 */
-  line-height: 1;
-}
-
-.price-slot-yen {
-  font-size: 16px;
-  font-weight: 500;
-  color: #e07b2a;
-  padding-bottom: 6px;
-}
-</style>
-
-{# --- JavaScript (bodyの閉じタグ前、またはblock scripts内に配置) --- #}
+{# --- JavaScript --- #}
 <script>
 (function () {
-  var wrap = document.getElementById("priceSlotWrap");
-  if (!wrap) return;
+  function initSlot() {
+    var wrap = document.getElementById("priceSlotWrap");
+    if (!wrap) return;
 
-  var ITEM_H = 54;
-  var SPIN_FROM = 9;
+    var ITEM_H = 54;
+    var DURATION = 1800;   // 全体のアニメーション時間(ms)
+    var STEPS = 80;        // カウントアップのステップ数 ← 増やすほど滑らか
+    var START_DELAY = 300; // ページ表示後の待機時間(ms)
 
-  // data-price から数字のみ抽出（カンマ・円記号があっても対応）
-  var priceRaw = wrap.dataset.price.replace(/[^0-9]/g, "");
+    var price = parseInt(wrap.dataset.price.replace(/[^0-9]/g, ""), 10);
+    var digits = String(price).length;
+    var digitEls = [];
 
-  function buildReels() {
-    wrap.innerHTML = "";
-    var reels = [];
-    Array.from(priceRaw).forEach(function (digit) {
-      var dw = document.createElement("div");
-      dw.className = "price-slot-digit";
-      var reel = document.createElement("div");
-      reel.className = "price-slot-reel";
-      dw.appendChild(reel);
-      wrap.appendChild(dw);
-      reels.push({ reel: reel, target: parseInt(digit, 10) });
-    });
-    var yen = document.createElement("span");
-    yen.className = "price-slot-yen";
-    yen.textContent = "円";
-    wrap.appendChild(yen);
-    return reels;
-  }
-
-  function animateReel(reel, target, delay) {
-    var DURATION = 420;
-
-    // 0の桁: 9→8→…→0 と上から流れてから着地
-    // 1以上の桁: 0→1→…→target とカウントアップ
-    var nums = [];
-    if (target === 0) {
-      for (var n = SPIN_FROM; n >= 0; n--) nums.push(n);
-    } else {
-      for (var n = 0; n <= target; n++) nums.push(n);
+    function zeroPad(num, len) {
+      var s = String(num);
+      while (s.length < len) s = "0" + s;
+      return s;
     }
 
-    reel.innerHTML = "";
-    nums.forEach(function (n) {
-      var el = document.createElement("div");
-      el.className = "price-slot-num";
-      el.textContent = n;
-      reel.appendChild(el);
-    });
+    function buildDisplay() {
+      wrap.innerHTML = "";
+      digitEls = [];
+      var str = zeroPad(price, digits);
+      Array.from(str).forEach(function () {
+        var dw = document.createElement("div");
+        dw.className = "price-slot-digit";
+        var reel = document.createElement("div");
+        reel.className = "price-slot-reel";
+        for (var n = 0; n <= 9; n++) {
+          var el = document.createElement("div");
+          el.className = "price-slot-num";
+          el.textContent = n;
+          reel.appendChild(el);
+        }
+        dw.appendChild(reel);
+        wrap.appendChild(dw);
+        digitEls.push(reel);
+      });
+      var yen = document.createElement("span");
+      yen.className = "price-slot-yen";
+      yen.textContent = "円";
+      wrap.appendChild(yen);
+    }
 
-    var total = nums.length;
-    reel.style.transition = "none";
-    reel.style.transform = "translateY(0)";
+    function setDigits(num) {
+      var str = zeroPad(num, digits);
+      Array.from(str).forEach(function (d, i) {
+        digitEls[i].style.transition = "transform 80ms ease-out";
+        digitEls[i].style.transform = "translateY(-" + (parseInt(d, 10) * ITEM_H) + "px)";
+      });
+    }
 
-    setTimeout(function () {
-      reel.style.transition = "transform " + DURATION + "ms cubic-bezier(0.15, 0.6, 0.35, 1)";
-      reel.style.transform = "translateY(-" + ((total - 1) * ITEM_H) + "px)";
-    }, delay);
+    function run() {
+      buildDisplay();
+      digitEls.forEach(function (reel) {
+        reel.style.transition = "none";
+        reel.style.transform = "translateY(0)";
+      });
+
+      setTimeout(function () {
+        var step = 0;
+        function tick() {
+          step++;
+          var progress = 1 - Math.pow(1 - step / STEPS, 3);
+          var current = Math.round(price * progress);
+          setDigits(current);
+          if (step < STEPS) {
+            var elapsed = (step / STEPS) * DURATION;
+            var nextElapsed = ((step + 1) / STEPS) * DURATION;
+            setTimeout(tick, nextElapsed - elapsed);
+          }
+        }
+        tick();
+      }, START_DELAY);
+    }
+
+    if (document.readyState === "loading") {
+      document.addEventListener("DOMContentLoaded", function () {
+        setTimeout(run, START_DELAY);
+      });
+    } else {
+      setTimeout(run, START_DELAY);
+    }
   }
 
-  function run() {
-    var reels = buildReels();
-    reels.forEach(function (r, i) {
-      animateReel(r.reel, r.target, i * 60);
-    });
-  }
-
-  // スクロールで要素が見えたら1回だけ起動
-  if ("IntersectionObserver" in window) {
-    var triggered = false;
-    var observer = new IntersectionObserver(function (entries) {
-      if (entries[0].isIntersecting && !triggered) {
-        triggered = true;
-        setTimeout(run, 150);
-        observer.disconnect();
-      }
-    }, { threshold: 0.3 });
-    buildReels();
-    observer.observe(wrap);
-  } else {
-    // IntersectionObserver非対応ブラウザはそのまま実行
-    run();
-  }
+  initSlot();
 })();
 </script>
