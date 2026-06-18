@@ -9,7 +9,13 @@
     <div class="card__body">
         <div class="product-detail">
 
-            <div class="product-detail__media">商品画像</div>
+            <div class="product-detail__media">
+                {% if item.image %}
+                    <img src="{{ item.image.url }}" alt="{{ item.name }}" class="product-detail__img">
+                {% else %}
+                    商品画像
+                {% endif %}
+            </div>
 
             <div class="product-detail__info">
                 <div class="product-detail__badges">
@@ -79,4 +85,14 @@
 <div class="page-actions">
     <a class="link-btn" href="{% url 'shop0c:main' %}">← 商品検索へ</a>
 </div>
+
+<style>
+.product-detail__img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 10px;
+    display: block;
+}
+</style>
 {% endblock %}

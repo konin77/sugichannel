@@ -3,8 +3,6 @@ from .models import Category
 
 
 class LoginForm(forms.Form):
-    #def __init__(self, *args, **kwargs):
-    #    super().__init__(*args, **kwargs)
     id = forms.CharField(label='会員ID', max_length=128, widget=forms.TextInput(attrs={'class':'form-control'}))
     password = forms.CharField(label='パスワード', max_length=256,widget=forms.PasswordInput(attrs={'placeholder': 'パスワード'}))
 
@@ -55,9 +53,6 @@ class PurchaseForm(forms.Form):
     )
 
 
-
-
-
 class AdminLoginForm(forms.Form):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -80,6 +75,8 @@ class ItemRegisterForm(forms.Form):
     price = forms.IntegerField(label="価格", min_value=0)
     stock = forms.IntegerField(label="在庫数", min_value=0)
     recommended = forms.BooleanField(label="オススメ", required=False)
+    # ★ 追加：商品画像（任意）
+    image = forms.ImageField(label="商品画像", required=False)
 
 
 class ItemUpdateForm(forms.Form):
@@ -95,6 +92,8 @@ class ItemUpdateForm(forms.Form):
     price = forms.IntegerField(label="価格", min_value=0)
     stock = forms.IntegerField(label="在庫数", min_value=0)
     recommended = forms.BooleanField(label="オススメ", required=False)
+    # ★ 追加：商品画像（任意・空のままで変更しない）
+    image = forms.ImageField(label="商品画像", required=False)
 
 
 class AdminPurchaseHistorySearchForm(forms.Form):
@@ -129,6 +128,3 @@ class AdminPurchaseHistorySearchForm(forms.Form):
             ("cancel", "キャンセル済み"),
         ]
     )
-
-
-

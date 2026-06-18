@@ -12,7 +12,11 @@
         {% for item in items %}
         <div class="product-card">
             <div class="product-card__thumb">
-                <span class="product-card__noimage">画像準備中</span>
+                {% if item.image %}
+                    <img src="{{ item.image.url }}" alt="{{ item.name }}" class="product-card__img">
+                {% else %}
+                    <span class="product-card__noimage">画像準備中</span>
+                {% endif %}
             </div>
             <div class="product-card__body">
                 <p class="product-card__maker">{{ item.manufacturer }}</p>
@@ -27,4 +31,13 @@
     <p class="back-link"><a href="{% url 'shop0c:main' %}">← 商品検索へ戻る</a></p>
 
 </div>
+
+<style>
+.product-card__img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+</style>
 {% endblock %}

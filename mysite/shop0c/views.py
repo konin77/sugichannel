@@ -632,6 +632,9 @@ class ItemList(View):
         }
         return render(request, "shop0c/adminItemList.html", context)
 
+# ============================================================
+# views.py の ItemRegister クラスを以下に丸ごと置き換えてください
+# ============================================================
 
 class ItemRegister(View):
     def get(self, request, *args, **kwargs):
@@ -649,7 +652,8 @@ class ItemRegister(View):
         if "admin_id" not in request.session:
             return redirect("shop0c:admin_login")
 
-        form = ItemRegisterForm(request.POST)
+        # ★ ファイルアップロードのため request.FILES も渡す
+        form = ItemRegisterForm(request.POST, request.FILES)
 
         if not form.is_valid():
             context = {
@@ -665,6 +669,7 @@ class ItemRegister(View):
         price = form.cleaned_data["price"]
         stock = form.cleaned_data["stock"]
         recommended = form.cleaned_data["recommended"]
+        image = form.cleaned_data.get("image")  # ★ 追加
 
         if Item.objects.filter(item_id=item_id).exists():
             context = {
@@ -681,16 +686,23 @@ class ItemRegister(View):
             color=color,
             price=price,
             stock=stock,
-            recommended=recommended
+            recommended=recommended,
         )
+
+        # ★ 画像が選択されていれば保存
+        if image:
+            item.image = image
 
         item.save()
 
         return redirect("shop0c:item_list")
 
 
+# ============================================================
+# views.py の ItemUpdate クラスを以下に丸ごと置き換えてください
+# ============================================================
+
 class ItemUpdate(View):
-    # UserUpdateを使いまわせそう
     def get(self, request, item_id, *args, **kwargs):
         if "admin_id" not in request.session:
             return redirect("shop0c:admin_login")
@@ -726,17 +738,18 @@ class ItemUpdate(View):
         if old_item is None:
             return redirect("shop0c:item_list")
 
-        form = ItemUpdateForm(request.POST)
+        # ★ ファイルアップロードのため request.FILES も渡す
+        form = ItemUpdateForm(request.POST, request.FILES)
 
         if not form.is_valid():
             context = {
                 "form": form,
                 "item": old_item,
             }
-
             return render(request, "shop0c/adminItemUpdate.html", context)
 
         new_item_id = form.cleaned_data["item_id"]
+        image = form.cleaned_data.get("image")  # ★ 追加
 
         # 商品IDに変更があったときの処理
         if new_item_id != old_item.item_id:
@@ -757,16 +770,17 @@ class ItemUpdate(View):
                 price=form.cleaned_data["price"],
                 stock=form.cleaned_data["stock"],
                 recommended=form.cleaned_data["recommended"],
+                # ★ 画像：新しく選択されていれば新画像、なければ旧画像を引き継ぐ
+                image=image if image else old_item.image,
             )
 
             new_item.save()
 
-            # データベースのレコードをアップデート
             Shopcart.objects.filter(item=old_item).update(item=new_item)
             Purchase.objects.filter(item=old_item).update(item=new_item)
 
             old_item.delete()
-        
+
         # 商品IDに変更がなければそのままのものを使う
         else:
             old_item.name = form.cleaned_data["name"]
@@ -776,11 +790,13 @@ class ItemUpdate(View):
             old_item.price = form.cleaned_data["price"]
             old_item.stock = form.cleaned_data["stock"]
             old_item.recommended = form.cleaned_data["recommended"]
+            # ★ 画像：新しく選択されていれば上書き、未選択なら現在の画像を維持
+            if image:
+                old_item.image = image
 
             old_item.save()
 
         return redirect("shop0c:item_list")
-
 
 class ItemDelete(View):
     def get(self, request, item_id, *args, **kwargs):
