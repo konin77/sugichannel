@@ -76,7 +76,8 @@ class Detailuesr(View):
         is_login = request.session.get('is_login')
         context = {
             'item':item,
-            'is_login':is_login
+            'is_login':is_login,
+            'price': item.price,
         }
 
         return render(request,'shop0c/itemDetail.html',context)

@@ -40,7 +40,11 @@
     {% for item in recommended_items %}
     <div class="product-card">
         <div class="product-card__thumb">
+            {% if item.image %}
+            <img src="{{ item.image.url }}" alt="{{ item.name }}" class="product-card__img">
+            {% else %}
             <span class="product-card__noimage">画像準備中</span>
+            {% endif %}
         </div>
         <div class="product-card__body">
             <p class="product-card__maker">{{ item.manufacturer }}</p>

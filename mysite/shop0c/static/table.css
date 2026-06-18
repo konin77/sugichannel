@@ -283,7 +283,7 @@ a:hover { color: var(--green-deep); }
   inset: 0;
   background:
     linear-gradient(90deg, rgba(255, 248, 237, 0.96) 0%, rgba(255, 248, 237, 0.78) 38%, rgba(255, 248, 237, 0.16) 68%),
-    url("cosmos-hero.png") center / cover no-repeat;
+    url("cosmos-hero.webp") center / cover no-repeat;
   transform: translate3d(calc(var(--hero-x, 0) * -12px), calc(var(--hero-y, 0) * -8px), 0) scale(1.035);
   z-index: -2;
 }
@@ -589,7 +589,7 @@ input[type="submit"].is-loading::after {
   overflow: hidden;
   background:
     linear-gradient(145deg, rgba(255, 255, 255, 0.10), rgba(255, 248, 237, 0.70)),
-    url("cosmos-hero.png") center / cover no-repeat;
+    url("cosmos-hero.webp") center / cover no-repeat;
 }
 
 .product-card__thumb::before {
@@ -678,7 +678,7 @@ input[type="submit"].is-loading::after {
   font-weight: 950;
   background:
     linear-gradient(180deg, rgba(255, 255, 255, 0.08), rgba(23, 21, 19, 0.10)),
-    url("cosmos-hero.png") center / cover no-repeat;
+    url("cosmos-hero.webp") center / cover no-repeat;
   box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.34), var(--shadow);
   overflow: hidden;
   position: relative;
@@ -1010,7 +1010,7 @@ td { color: var(--ink-soft); }
   .hero::before {
     background:
       linear-gradient(180deg, rgba(255, 248, 237, 0.96) 0%, rgba(255, 248, 237, 0.68) 62%, rgba(255, 248, 237, 0.28) 100%),
-      url("cosmos-hero.png") center / cover no-repeat;
+      url("cosmos-hero.webp") center / cover no-repeat;
   }
 
   .search-box form {
@@ -1057,4 +1057,14 @@ td { color: var(--ink-soft); }
     scroll-behavior: auto !important;
     transition-duration: 0.01ms !important;
   }
+}
+
+
+.product-card__img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: 1;
 }
