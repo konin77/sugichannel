@@ -27,10 +27,9 @@ class Top(View):
         )
 
         context = {
-            'login_flag': login_flag,
-            'name': name,
-            'recommended_items': Item.objects.filter(recommended=True),
-            'ranking_items': ranking_items,
+            'login_flag':login_flag,
+            'name':name,
+            'recommended_items': Item.objects.filter(recommended=True).order_by('item_id')[:8],
         }
         return render(request,'shop0c/main.html',context)
 
