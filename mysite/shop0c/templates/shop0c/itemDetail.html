@@ -21,7 +21,6 @@
                     {% else %}
                     <span class="badge badge--out">在庫なし</span>
                     {% endif %}
-                    <span class="badge badge--color">{{ item.color }}</span>
                 </div>
 
                 <p class="product-detail__maker">{{ item.manufacturer }}</p>
@@ -33,10 +32,6 @@
                 </div>
 
                 <dl class="spec">
-                    <div class="spec__row">
-                        <dt>商品の色</dt>
-                        <dd>{{ item.color }}</dd>
-                    </div>
                     <div class="spec__row">
                         <dt>メーカー名</dt>
                         <dd>{{ item.manufacturer }}</dd>

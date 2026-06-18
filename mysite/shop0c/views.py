@@ -507,7 +507,7 @@ class PurchaseCommit(View):
 class PurchaseHistory(View):
     def get(self, request, *args, **kwargs):
         if "user_id" not in request.session:
-            return redirect("login")
+            return redirect("shop0c:login")
 
         user_id = request.session["user_id"]
         user = User.objects.get(user_id=user_id)

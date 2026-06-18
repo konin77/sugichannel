@@ -17,9 +17,6 @@
             <div class="product-card__body">
                 <p class="product-card__maker">{{ item.manufacturer }}</p>
                 <a href="{% url 'shop0c:detail' pk=item.item_id %}" class="product-card__name">{{ item.name }}</a>
-                <div class="product-card__tags">
-                    <span class="tag tag-color">{{ item.color }}</span>
-                </div>
                 <p class="product-card__price">¥{{ item.price }}</p>
                 <a href="{% url 'shop0c:detail' pk=item.item_id %}" class="btn-primary">詳細を見る</a>
             </div>

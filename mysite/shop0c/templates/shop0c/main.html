@@ -6,8 +6,8 @@
 
 <!-- ===== ヒーロー（検索エリア） ===== -->
 <div class="hero">
-    <h1>商品の検索を行います</h1>
-    <p>カテゴリやキーワードで商品を探そう</p>
+    <h1>日常を、少し未来の買い物体験へ。</h1>
+    <p>カテゴリとキーワードから、COSMOSが選ぶアイテムを見つけよう。</p>
 
     <div class="search-box">
         <form method="POST" action="{% url 'shop0c:search' %}">
@@ -26,7 +26,7 @@
             <label>キーワード：</label>
             <input type="text" name="keyword" placeholder="商品名を入力...">
 
-            <button type="submit">検索</button>
+            <button type="submit">探す</button>
         </form>
     </div>
 </div>
@@ -45,9 +45,6 @@
         <div class="product-card__body">
             <p class="product-card__maker">{{ item.manufacturer }}</p>
             <a href="{% url 'shop0c:detail' pk=item.item_id %}" class="product-card__name">{{ item.name }}</a>
-            <div class="product-card__tags">
-                <span class="tag tag-color">{{ item.color }}</span>
-            </div>
             <p class="product-card__price">¥{{ item.price }}</p>
             <a href="{% url 'shop0c:detail' pk=item.item_id %}" class="btn-primary">詳細を見る</a>
         </div>
@@ -83,6 +80,6 @@
     <a href="{% url 'shop0c:login' %}">ログイン</a><br>
     {% endif %}
     <a href="{% url 'shop0c:admin_login' %}">管理者ページ</a><br>
-</body>
-</html>
+    </div>
+</div>
 {% endblock %}
