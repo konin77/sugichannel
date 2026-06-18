@@ -30,6 +30,7 @@ class Top(View):
             'login_flag':login_flag,
             'name':name,
             'recommended_items': Item.objects.filter(recommended=True).order_by('item_id')[:8],
+            'ranking_items':ranking_items
         }
         return render(request,'shop0c/main.html',context)
 
