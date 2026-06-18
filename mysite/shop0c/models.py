@@ -92,6 +92,7 @@ class Item(models.Model):
             blank=True,
             null=True
     )
+    
 
 
 class Shopcart(models.Model):

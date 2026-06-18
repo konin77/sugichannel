@@ -558,6 +558,192 @@ input[type="submit"].is-loading::after {
 .badge--color,
 .tag-color { color: var(--orange-deep); background: rgba(255, 210, 138, 0.48); }
 
+/* ===== 検索ツールバー（並び替え） ===== */
+.search-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.sort-box {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.sort-label {
+  font-size: 13px;
+  color: var(--muted);
+  font-weight: 600;
+}
+
+.sort-select {
+  padding: 7px 32px 7px 14px;
+  border-radius: 999px;
+  border: 1.5px solid rgba(200, 160, 100, 0.45);
+  background: rgba(255, 255, 255, 0.82) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23c07820' stroke-width='1.8' fill='none' stroke-linecap='round'/%3E%3C/svg%3E") no-repeat right 12px center;
+  appearance: none;
+  color: var(--orange-deep);
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: border-color 0.18s, box-shadow 0.18s;
+}
+
+.sort-select:focus {
+  outline: none;
+  border-color: var(--orange-deep);
+  box-shadow: 0 0 0 3px rgba(240, 170, 60, 0.18);
+}
+
+/* ===== 在庫わずかバッジ ===== */
+.stock-badge {
+  position: absolute;
+  bottom: 10px;
+  left: 10px;
+  z-index: 2;
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 12px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 900;
+  line-height: 1;
+  backdrop-filter: blur(6px);
+}
+
+.stock-badge--low {
+  background: rgba(255, 160, 30, 0.88);
+  color: #fff;
+  box-shadow: 0 2px 8px rgba(200, 100, 0, 0.28);
+}
+
+.stock-badge--out {
+  background: rgba(220, 60, 60, 0.86);
+  color: #fff;
+  box-shadow: 0 2px 8px rgba(180, 40, 40, 0.28);
+}
+
+/* ===== 売上ランキング ===== */
+.ranking-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 40px;
+}
+
+.ranking-row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 14px 20px;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.82);
+  box-shadow: var(--shadow);
+  text-decoration: none;
+  color: inherit;
+  transition: box-shadow 0.2s, transform 0.2s;
+}
+
+.ranking-row:hover {
+  box-shadow: var(--shadow-strong);
+  transform: translateY(-2px);
+}
+
+.ranking-num {
+  flex-shrink: 0;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  font-weight: 950;
+  background: rgba(200, 160, 100, 0.18);
+  color: var(--muted);
+}
+
+.ranking-num--1 { background: linear-gradient(135deg, #ffe066, #ffc107); color: #6b3a00; font-size: 20px; }
+.ranking-num--2 { background: linear-gradient(135deg, #e8e8e8, #c0c0c0); color: #444; }
+.ranking-num--3 { background: linear-gradient(135deg, #ffd4a0, #cd7f32); color: #5a2d00; }
+
+.ranking-thumb {
+  flex-shrink: 0;
+  width: 64px;
+  height: 64px;
+  border-radius: 10px;
+  overflow: hidden;
+  background: rgba(255, 240, 210, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ranking-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.ranking-noimage {
+  font-size: 10px;
+  color: var(--muted);
+  font-weight: 700;
+}
+
+.ranking-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.ranking-maker {
+  margin: 0 0 2px;
+  font-size: 11px;
+  color: var(--muted);
+  font-weight: 600;
+}
+
+.ranking-name {
+  margin: 0 0 4px;
+  font-size: 15px;
+  font-weight: 800;
+  color: var(--ink);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.ranking-price {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 800;
+  color: var(--orange-deep);
+}
+
+.ranking-sold {
+  flex-shrink: 0;
+  text-align: center;
+}
+
+.ranking-sold__num {
+  display: block;
+  font-size: 22px;
+  font-weight: 950;
+  color: var(--orange-deep);
+  line-height: 1;
+}
+
+.ranking-sold__label {
+  font-size: 11px;
+  color: var(--muted);
+  font-weight: 600;
+}
+
 .product-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(238px, 1fr));
@@ -1058,7 +1244,6 @@ td { color: var(--ink-soft); }
     transition-duration: 0.01ms !important;
   }
 }
-
 
 .product-card__img {
   position: absolute;

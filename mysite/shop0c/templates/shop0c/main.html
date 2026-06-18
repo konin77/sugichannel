@@ -7,7 +7,7 @@
 <!-- ===== ヒーロー（検索エリア） ===== -->
 <div class="hero">
     <h1>日常を、少し未来の買い物体験へ。</h1>
-    <p>カテゴリとキーワードから、COSMOSが選ぶアイテムを見つけよう。</p>
+    <p>カテゴリとキーワードから、<br>COSMOSが選ぶアイテムを見つけよう。</p>
 
     <div class="search-box">
         <form method="POST" action="{% url 'shop0c:search' %}">
@@ -43,7 +43,7 @@
             {% if item.image %}
             <img src="{{ item.image.url }}" alt="{{ item.name }}" class="product-card__img" loading="lazy" decoding="async">
             {% else %}
-            <span class="product-card__noimage">画像準備中</span>
+                <span class="product-card__noimage">画像準備中</span>
             {% endif %}
         </div>
         <div class="product-card__body">
@@ -57,6 +57,40 @@
     <p class="cart-empty" style="grid-column: 1 / -1;">オススメ商品はまだありません。</p>
     {% endfor %}
 </div>
+
+<!-- ===== 売上ランキング ===== -->
+<div class="section-head">
+    <span class="section-title">売上ランキング</span>
+    <span class="badge badge--rec">TOP 5</span>
+</div>
+
+{% if ranking_items %}
+<div class="ranking-list">
+    {% for r in ranking_items %}
+    <a href="{% url 'shop0c:detail' pk=r.item__item_id %}" class="ranking-row">
+        <span class="ranking-num ranking-num--{{ forloop.counter }}">{{ forloop.counter }}</span>
+        <div class="ranking-thumb">
+            {% if r.item__image %}
+                <img src="/media/{{ r.item__image }}" alt="{{ r.item__name }}">
+            {% else %}
+                <span class="ranking-noimage">No Image</span>
+            {% endif %}
+        </div>
+        <div class="ranking-info">
+            <p class="ranking-maker">{{ r.item__manufacturer }}</p>
+            <p class="ranking-name">{{ r.item__name }}</p>
+            <p class="ranking-price">¥{{ r.item__price }}</p>
+        </div>
+        <div class="ranking-sold">
+            <span class="ranking-sold__num">{{ r.total_sold }}</span>
+            <span class="ranking-sold__label">sold</span>
+        </div>
+    </a>
+    {% endfor %}
+</div>
+{% else %}
+<p class="cart-empty">まだ売上データがありません。</p>
+{% endif %}
 <!-- ===== カードセクション ===== -->
 <div class="card-row">
 

@@ -6,7 +6,22 @@
 <div class="page">
 
     <h1>キーワード"{{ keyword }}" カテゴリ"{{ category_name }}"の検索結果</h1>
-    <p class="result-count">{{ items|length }}件の商品が見つかりました</p>
+
+    <div class="search-toolbar">
+        <p class="result-count">{{ items|length }}件の商品が見つかりました</p>
+
+        <div class="sort-box">
+            <label class="sort-label" for="sort-select">並び替え：</label>
+            <select id="sort-select" class="sort-select" onchange="location.href='?sort='+this.value">
+                <option value="default"    {% if sort == 'default'    %}selected{% endif %}>標準</option>
+                <option value="popular"    {% if sort == 'popular'    %}selected{% endif %}>人気順</option>
+                <option value="price_asc"  {% if sort == 'price_asc'  %}selected{% endif %}>価格が安い順</option>
+                <option value="price_desc" {% if sort == 'price_desc' %}selected{% endif %}>価格が高い順</option>
+                <option value="stock_asc"  {% if sort == 'stock_asc'  %}selected{% endif %}>在庫が少ない順</option>
+                <option value="stock_desc" {% if sort == 'stock_desc' %}selected{% endif %}>在庫が多い順</option>
+            </select>
+        </div>
+    </div>
 
     <div class="product-grid">
         {% for item in items %}
@@ -16,6 +31,13 @@
                 <img src="{{ item.image.url }}" alt="{{ item.name }}" class="product-card__img" loading="lazy" decoding="async">
                 {% else %}
                     <span class="product-card__noimage">画像準備中</span>
+                {% endif %}
+
+                {# ⑪ 在庫わずかバッジ #}
+                {% if item.stock == 0 %}
+                    <span class="stock-badge stock-badge--out">在庫なし</span>
+                {% elif item.stock <= 3 %}
+                    <span class="stock-badge stock-badge--low">残りわずか（{{ item.stock }}点）</span>
                 {% endif %}
             </div>
             <div class="product-card__body">
@@ -31,13 +53,4 @@
     <p class="back-link"><a href="{% url 'shop0c:main' %}">← 商品検索へ戻る</a></p>
 
 </div>
-
-<style>
-.product-card__img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    display: block;
-}
-</style>
 {% endblock %}
