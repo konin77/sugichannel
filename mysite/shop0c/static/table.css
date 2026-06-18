@@ -1058,3 +1058,13 @@ td { color: var(--ink-soft); }
     transition-duration: 0.01ms !important;
   }
 }
+
+
+.product-card__img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: 1;
+}
