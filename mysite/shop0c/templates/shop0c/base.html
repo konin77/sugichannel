@@ -16,7 +16,12 @@
                 <small>COSMOS Shop</small>
             </span>
         </a>
-        <nav>
+        <button class="nav-toggle" type="button" aria-label="メニューを開く" aria-expanded="false" data-nav-toggle>
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+        <nav class="site-nav" data-nav>
             <ul class="navbar-menu">
                 <li><a href="{% url 'shop0c:main' %}">商品検索</a></li>
                 {% if login_flag %}
@@ -38,5 +43,6 @@
     <footer class="site-footer">
         <p>© COSMOS Shop</p>
     </footer>
+    <script src="{% static 'app.js' %}" defer></script>
 </body>
 </html>

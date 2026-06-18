@@ -15,7 +15,6 @@
         <table>
             <tr>
                 <th>商品名</th>
-                <th>色</th>
                 <th>メーカー</th>
                 <th>単価</th>
                 <th>数量</th>
@@ -24,7 +23,6 @@
             {% for detail in purchase_history.detail_list %}
             <tr>
                 <td>{{ detail.item.name }}</td>
-                <td>{{ detail.item.color }}</td>
                 <td>{{ detail.item.manufacturer }}</td>
                 <td>{{ detail.item.price }}円</td>
                 <td>{{ detail.amount }}</td>
