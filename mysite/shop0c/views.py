@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.views.generic import View
+from django.db.models import Sum, Count, Q
 from shop0c.models import User, Item, Shopcart, Purchase, Detail, Admin, Category
 from shop0c.forms import LoginForm, RegistUserForm ,UpdateUserForm, AdminLoginForm, ItemRegisterForm, ItemUpdateForm, PurchaseForm
 #from django.contrib.auth import logout
@@ -13,15 +14,26 @@ def index(request):
 
 class Top(View):
     def get(self,request):
-        #form = Search()
         login_flag = request.session.get('is_login')
         name = request.session.get('name')
+
+        # 売上ランキング：キャンセルを除いた注文明細から購入数合計TOP5
+        ranking_items = (
+            Detail.objects
+            .filter(Purchase__cancel=False)
+            .values('item__item_id', 'item__name', 'item__manufacturer', 'item__price', 'item__stock', 'item__image')
+            .annotate(total_sold=Sum('amount'))
+            .order_by('-total_sold')[:5]
+        )
+
         context = {
             'login_flag':login_flag,
             'name':name,
-            'recommended_items': Item.objects.filter(recommended=True),  
+            'recommended_items': Item.objects.filter(recommended=True).order_by('item_id')[:8],
+            'ranking_items':ranking_items
         }
         return render(request,'shop0c/main.html',context)
+
     def post(self,request):
         login_flag = request.session.get('is_login')
         context = {
@@ -32,42 +44,75 @@ class Top(View):
 
 class Search(View):
     def get(self, request):
-        pass
+        # 並び替えのみGETで受け取る（検索条件はセッションから復元）
+        category = request.session.get('search_category', 'all')
+        keyword = request.session.get('search_keyword', '')
+        sort = request.GET.get('sort', 'default')
+        return self._render(request, category, keyword, sort)
+
     def post(self, request):
         category = request.POST['category']
         keyword = request.POST['keyword']
-        category_map = {
-            'all':'すべて',
-            '1':'家電',
-            '2':'パソコン・周辺機器',
-            '3':'文房具',
-            '4':'キッチン用品',
-            '5':'スポーツ用品',
-            '6':'鞄',
-            '7':'帽子',
-        }
+        sort = request.POST.get('sort', 'default')
+        # 検索条件をセッションに保存（並び替え時に再利用）
+        request.session['search_category'] = category
+        request.session['search_keyword'] = keyword
+        return self._render(request, category, keyword, sort)
 
-        category_name = category_map[category]
+    def _render(self, request, category, keyword, sort):
+        category_map = {
+            'all': 'すべて',
+            '1': '家電',
+            '2': 'パソコン・周辺機器',
+            '3': '文房具',
+            '4': 'キッチン用品',
+            '5': 'スポーツ用品',
+            '6': '鞄',
+            '7': '帽子',
+        }
+        category_name = category_map.get(category, 'すべて')
+
         if category != 'all':
             if keyword:
                 queryset = Item.objects.filter(category=int(category), name__icontains=keyword)
             else:
                 queryset = Item.objects.filter(category=int(category))
-        
         else:
             if keyword:
                 queryset = Item.objects.filter(name__icontains=keyword)
             else:
                 queryset = Item.objects.all()
-        
-        context = {
-            'items':queryset,
-            'category':category,
-            'keyword':keyword,
-            'category_name':category_name
-        }
 
-        return render(request,'shop0c/searchResult.html',context)
+        # 並び替え
+        sort_options = {
+            'price_asc':   ('価格が安い順',  'price'),
+            'price_desc':  ('価格が高い順', '-price'),
+            'stock_asc':   ('在庫が少ない順', 'stock'),
+            'stock_desc':  ('在庫が多い順', '-stock'),
+            'popular':     ('人気順', None),  # annotateで処理するため別扱い
+        }
+        if sort == 'popular':
+            # キャンセルを除いた購入数合計で降順
+            queryset = (
+                queryset
+                .annotate(total_sold=Sum('detail__amount', filter=Q(detail__Purchase__cancel=False)))
+                .order_by('-total_sold')
+            )
+        elif sort in sort_options:
+            queryset = queryset.order_by(sort_options[sort][1])
+        else:
+            queryset = queryset.order_by('item_id')
+            sort = 'default'
+
+        context = {
+            'items': queryset,
+            'category': category,
+            'keyword': keyword,
+            'category_name': category_name,
+            'sort': sort,
+            'sort_options': sort_options,
+        }
+        return render(request, 'shop0c/searchResult.html', context)
 
 
 class Detailuesr(View):
